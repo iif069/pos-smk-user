@@ -589,16 +589,30 @@
       document.getElementById('grid-produk').innerHTML = kartu.repeat(jumlah);
     }
 
+    // FIX: sekarang backend doGet membungkus semua response jadi
+    // { sukses: true/false, data / error } (biar konsisten dengan action-action
+    // lain buat kasir di Vercel). Jadi di sini kita harus ambil `respon.data`,
+    // BUKAN `respon` langsung seperti sebelumnya — kalau tidak, kelompokkanProduk()
+    // akan gagal (list.forEach bukan array) dan halaman nyangkut di skeleton
+    // tanpa pesan error sama sekali.
     function muatProduk() {
       tampilSkeleton(8);
       const namaCallback = 'cbProduk' + Date.now();
-      window[namaCallback] = function (data) {
+      window[namaCallback] = function (respon) {
+        delete window[namaCallback];
+        tagScript.remove();
+
+        if (!respon || !respon.sukses) {
+          document.getElementById('grid-produk').innerHTML =
+            '<div class="kosong">Gagal memuat produk' + (respon && respon.error ? ': ' + respon.error : '') + '. Coba refresh halaman.</div>';
+          return;
+        }
+
+        const data = respon.data;
         semuaProduk = data;
         grupProduk = kelompokkanProduk(data);
         isiFilterKategori();
         renderProduk();
-        delete window[namaCallback];
-        tagScript.remove();
       };
       const tagScript = document.createElement('script');
       tagScript.src = URL_API + '?callback=' + namaCallback;
