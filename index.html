@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1c2430;
+      --paper: #f6f5f1;
+      --line: #dcd8cf;
+      --accent: #7B29BA;
+      --accent-dark: #5c1f8c;
+      --warn: #e0261f;
+      /* Dipakai khusus untuk info non-blocking (stok rendah, lengkapi pilihan) —
+         dipisah dari --warn biar gak disamakan sama error sungguhan. */
+      --peringatan: #b7791f;
+      --muted: #6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Sora', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+    }
+    header {
+      background: var(--ink);
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    header h1 { font-size: 16px; margin: 0; letter-spacing: .3px; }
+    header span { font-size: 12px; color: #f6f5f1; }
+
+    .keterangan {
+      background: #fff3d6;
+      color: #7a4a00;
+      padding: 10px 16px;
+      font-size: 13px;
+      line-height: 1.5;
+      border-bottom: 1px solid #f0dca0;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .keterangan .ikon { flex-shrink: 0; font-size: 15px; }
+
+    .layout {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 50px);
+    }
+    @media (min-width: 860px) {
+      .layout { flex-direction: row; }
+      .panel-produk { flex: 1.5; border-right: 1px solid var(--line); }
+      .panel-keranjang {
+        flex: 1;
+        height: calc(100vh - 50px);
+        position: sticky;
+        top: 0;
+        overflow-y: auto;
+    }
+    }
+
+    .panel-produk { padding: 14px; }
+    .filters {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .filters input {
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 14px;
+      background: #fff;
+    }
+    .filters input { flex: 1; min-width: 140px; }
+
+    /* Pil kategori — dipakai kalau kategorinya sedikit, jadi langsung kelihatan
+       semua tanpa perlu buka dropdown */
+    .kategori-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+    .pil-kategori {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+      white-space: nowrap;
+      transition: transform .08s, background .1s;
+    }
+    .pil-kategori:active { transform: scale(.94); }
+    .pil-kategori.aktif { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    .grid-produk {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    .kartu-grid {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      text-align: left;
+      cursor: pointer;
+      font-family: inherit;
+      color: inherit;
+    }
+    .kartu-grid:disabled { opacity: .55; cursor: not-allowed; }
+    .gambar-produk {
+      aspect-ratio: 1 / 1;
+      background-size: cover;
+      background-position: center;
+      background-color: #ecebe6;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ikon-fallback { font-size: 30px; opacity: .35; }
+    .label-habis {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--warn);
+      text-align: center;
+    }
+    .info-grid { padding: 8px 10px 10px; }
+    .nama-grid { font-weight: 700; font-size: 14px; line-height: 1.25; margin-bottom: 3px; }
+    .harga-grid { font-size: 13px; color: var(--accent-dark); font-weight: 700; }
+
+    .kartu-skeleton {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .skeleton-gambar {
+      aspect-ratio: 1 / 1;
+      background: linear-gradient(90deg, #eae7df 25%, #f6f4ef 37%, #eae7df 63%);
+      background-size: 400% 100%;
+      animation: kilau 1.4s ease infinite;
+    }
+    .skeleton-baris {
+      height: 10px;
+      margin: 10px 10px 0;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #eae7df 25%, #f6f4ef 37%, #eae7df 63%);
+      background-size: 400% 100%;
+      animation: kilau 1.4s ease infinite;
+    }
+    .skeleton-baris.pendek { width: 45%; margin-bottom: 10px; }
+    .skeleton-baris.panjang { width: 80%; }
+    @keyframes kilau {
+      0% { background-position: 100% 50%; }
+      100% { background-position: 0 50%; }
+    }
+
+    .header-produk { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+    .header-produk .nama { font-weight: 700; font-size: 18px; }
+    .header-produk .kategori { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,16,10,.45);
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s ease;
+    }
+    .modal-overlay.terbuka { opacity: 1; pointer-events: auto; }
+    .modal-sheet {
+      background: #fff;
+      width: 100%;
+      max-width: 480px;
+      max-height: 88vh;
+      overflow-y: auto;
+      border-radius: 16px 16px 0 0;
+      padding: 16px;
+      position: relative;
+      transform: translateY(16px);
+      transition: transform .25s ease;
+    }
+    .modal-overlay.terbuka .modal-sheet { transform: translateY(0); }
+    @media (min-width: 860px) {
+      .modal-overlay { align-items: center; }
+      .modal-sheet { border-radius: 16px; }
+    }
+    .modal-tutup {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 32px; height: 32px;
+      border: none;
+      background: #f1efe9;
+      border-radius: 50%;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+    .modal-gambar {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background-size: cover;
+      background-position: center;
+      background-color: #ecebe6;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-sheet .baris-dropdown { margin-top: 6px; }
+    .modal-sheet .baris-aksi { margin-top: 14px; }
+
+    .baris-dropdown { display: flex; flex-direction: column; gap: 8px; }
+    .label-chip { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+    .chip-baris { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      padding: 8px 24px;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .08s, background .1s;
+    }
+    .chip:active { transform: scale(.93); }
+    .chip.aktif { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .chip.habis {
+      opacity: .4;
+      text-decoration: line-through;
+      cursor: not-allowed;
+      background: #f1efe9;
+    }
+    .chip.habis:active { transform: none; }
+
+    .info-pilihan {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      min-height: 18px;
+      margin-top: 24px;
+    }
+    .info-pilihan .harga { font-size: 18px; font-weight: 700; }
+    .info-pilihan .stok { color: var(--muted); }
+    .info-pilihan .stok.rendah { color: var(--peringatan); font-weight: 600; }
+    .info-pilihan .petunjuk {
+      color: var(--peringatan);
+      font-weight: 600;
+      font-size: 13px;
+      background: #fdf3e0;
+      padding: 7px 10px;
+      border-radius: 6px;
+      width: 100%;
+      text-align: center;
+    }
+    .baris-aksi {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .qty-ctl {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 2px 6px;
+    }
+    .qty-ctl button {
+      width: 38px; height: 38px;
+      border: none;
+      background: none;
+      font-size: 15px;
+      cursor: pointer;
+      color: var(--ink);
+    }
+    .qty-ctl span { min-width: 18px; text-align: center; font-size: 13px; }
+
+    .btn-tambah {
+      flex: 1;
+      padding: 14px;
+      border: none;
+      border-radius: 7px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform .05s, background .05s;
+    }
+    .btn-tambah:disabled { background: #c7cdc9; cursor: not-allowed; }
+    .btn-tambah:hover:not(:disabled) { background: #000; }
+    .btn-tambah:active:not(:disabled) { transform: scale(.9); background: #000; }
+
+    .panel-keranjang {
+      background: #fff;
+      border-top: 1px solid var(--line);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media (max-width: 859px) {
+  .panel-keranjang {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    max-height: 75vh;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 14px rgba(0,0,0,.15);
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%);
+    transition: transform .25s ease;
+    z-index: 50;
+  }
+  .panel-keranjang.buka { transform: translateY(0); }
+  .tutup-keranjang-mobile {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    border: none;
+    background: #f1efe9;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .fab-keranjang {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    width: 56px; height: 56px;
+    border: none;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.3);
+    cursor: pointer;
+    z-index: 60;
+  }
+  .fab-keranjang svg { width: 24px; height: 24px; }
+  .badge-keranjang {
+    position: absolute;
+    top: -4px; right: -4px;
+    min-width: 20px; height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--warn);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid #fff;
+  }
+  .pop { animation: popKeranjang .35s ease; }
+  @keyframes popKeranjang {
+    0% { transform: scale(1); }
+    35% { transform: scale(1.3); }
+    60% { transform: scale(.92); }
+    100% { transform: scale(1); }
+  }
+
+  body { padding-bottom: 88px; }
+  }
+    @media (min-width: 860px) {
+  .fab-keranjang, .tutup-keranjang-mobile { display: none; }
+  }
+
+    @media (min-width: 860px) {
+      .panel-keranjang { border-top: none; }
+    }
+    .panel-keranjang h2 { font-size: 14px; margin: 0 0 10px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); }
+
+    .baris-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .baris-item .info { flex: 1; }
+    .baris-item .info .nama { font-weight: 600; }
+    .baris-item .info .varian { font-size: 12px; color: var(--muted); }
+    .baris-item .jml { font-size: 18px; color: var(--muted); }
+    .baris-item .subtotal { width: 78px; text-align: right; font-variant-numeric: tabular-nums; }
+    .baris-item .hapus { color: var(--warn); cursor: pointer; font-size: 12px; padding-left: 4px; }
+
+    .kosong { color: var(--muted); font-size: 13px; padding: 20px 0; text-align: center; grid-column: 1 / -1; }
+
+    .ringkasan { margin-top: auto; padding-top: 12px; }
+    .ringkasan .baris {
+      display: flex; justify-content: space-between;
+      font-size: 14px; margin-bottom: 6px;
+    }
+    .ringkasan .total { font-size: 24px; font-weight: 700; }
+    .ringkasan input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 6px 0;
+    }
+    .ringkasan input.error { border-color: var(--warn); }
+    .goyang { animation: goyangInput .4s ease; }
+    @keyframes goyangInput {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .hint-nama {
+      display: none;
+      color: var(--warn);
+      font-size: 12px;
+      margin: -2px 0 6px;
+    }
+    .hint-nama.tampil { display: block; }
+
+    button.selesai {
+      width: 100%;
+      padding: 13px;
+      margin-top: 10px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .08s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    button.selesai:disabled { background: #a9b3ac; cursor: not-allowed; }
+    button.selesai:hover:not(:disabled) { background: #1ebe5a; }
+
+    .pesan { font-size: 13px; padding: 8px 10px; border-radius: 8px; margin-top: 10px; }
+    .pesan.error { background: #fbe9e5; color: var(--warn); }
+
+    .bola-terbang {
+      position: fixed;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      background: var(--ink);
+      z-index: 200;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform .45s cubic-bezier(.2,.8,.2,1), opacity .45s ease;
+      opacity: 1;
+    }
+    .bola-terbang.terbang {
+      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.25);
+      opacity: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Order Online · MIG Digital Printing</h1>
+    <span id="jam-header"></span>
+  </header>
+
+  <div class="keterangan">
+    <span class="ikon">📌</span>
+    <span>Khusus <b>Batik</b> dan <b>Baju Praktik</b>: Alur pesanan lewat WhatsApp dulu. Barang baru bisa diambil mulai jam <b>4 sore</b> di hari yang sama.</span>
+  </div>
+
+  <div class="layout">
+    <div class="panel-produk">
+      <div class="filters">
+        <input type="text" id="cari" placeholder="Cari nama produk...">
+      </div>
+      <div class="kategori-pills" id="kategori-pills"></div>
+      <div class="grid-produk" id="grid-produk"></div>
+    </div>
+
+    <div class="panel-keranjang">
+      <button class="tutup-keranjang-mobile" onclick="toggleKeranjangMobile()">✕</button>
+      <h2>Keranjang</h2>
+      <div id="daftar-keranjang">
+        <div class="kosong">Belum ada barang dipilih.</div>
+      </div>
+
+      <div class="ringkasan">
+        <div class="baris"><span>Total</span><span class="total" id="teks-total">Rp 0</span></div>
+        <input type="text" id="input-nama" placeholder="Nama pembeli" autocomplete="name">
+        <div class="hint-nama" id="hint-nama">Isi nama dulu ya, biar pesanannya jelas.</div>
+        <button class="selesai" id="btn-selesai" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.72.45 3.4 1.31 4.88L2.05 22l5.36-1.41c1.42.78 3.02 1.19 4.63 1.19h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2z"/></svg>
+          Pesan via WhatsApp
+        </button>
+        <div id="area-pesan"></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="fab-keranjang" id="ikon-keranjang" onclick="toggleKeranjangMobile()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="9" cy="21" r="1"></circle>
+      <circle cx="20" cy="21" r="1"></circle>
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+    </svg>
+    <span class="badge-keranjang" id="badge-keranjang">0</span>
+  </button>
+
+  <div class="modal-overlay" id="modal-overlay" onclick="tutupModal()">
+    <div class="modal-sheet" onclick="event.stopPropagation()">
+      <button class="modal-tutup" onclick="tutupModal()">✕</button>
+      <div id="modal-konten"></div>
+    </div>
+  </div>
+
+  <script>
+    // GANTI dengan URL Web App Apps Script kasir kamu (yang formatnya .../exec)
+    const URL_API = 'https://script.google.com/macros/s/AKfycbyAp5STZklpa_MuiokFpIWDgonX51I5ZSD4gBylnhkh77uCpeLmMrCnuhCGcFZTGOA-/exec';
+
+    const NOMOR_WA = '6289510405562';
+
+    const DIMENSI = ['Jurusan', 'Tipe Lengan', 'Ukuran', 'Jenis Kelamin'];
+    const DIMENSI_FOTO = ['Jurusan', 'Tipe Lengan', 'Jenis Kelamin']; // kolom yang biasanya bikin tampilan foto beda
+    const URUTAN_UKURAN = ['S', 'M', 'L', 'XL', 'XXL', '2XL', '3XL', '4XL'];
+
+    let semuaProduk = [];
+    let grupProduk = [];
+    let pilihanGrup = {};
+    let keranjang = {};
+    let modalTerbuka = null;
+    let kategoriAktif = ''; // '' berarti "Semua"
+
+    document.getElementById('jam-header').textContent = new Date().toLocaleDateString('id-ID', {
+      weekday: 'long', day: 'numeric', month: 'long'
+    });
+
+    function formatRupiah(angka) {
+      return 'Rp ' + Number(angka).toLocaleString('id-ID');
+    }
+
+    function tampilSkeleton(jumlah) {
+      const kartu = '<div class="kartu-skeleton"><div class="skeleton-gambar"></div><div class="skeleton-baris panjang"></div><div class="skeleton-baris pendek"></div></div>';
+      document.getElementById('grid-produk').innerHTML = kartu.repeat(jumlah);
+    }
+
+    function muatProduk() {
+      tampilSkeleton(8);
+      const namaCallback = 'cbProduk' + Date.now();
+      window[namaCallback] = function (data) {
+        semuaProduk = data;
+        grupProduk = kelompokkanProduk(data);
+        isiFilterKategori();
+        renderProduk();
+        delete window[namaCallback];
+        tagScript.remove();
+      };
+      const tagScript = document.createElement('script');
+      tagScript.src = URL_API + '?callback=' + namaCallback;
+      tagScript.onerror = function () {
+        document.getElementById('grid-produk').innerHTML =
+          '<div class="kosong">Gagal memuat produk. Coba refresh halaman.</div>';
+      };
+      document.body.appendChild(tagScript);
+    }
+
+    function kelompokkanProduk(list) {
+      const grup = {};
+      list.forEach(p => {
+        // .trim() biar spasi berlebih di sheet (misal "Atribut Pramuka " vs
+        // "Atribut Pramuka") gak bikin produk yang sama dianggap 2 produk beda
+        const namaBersih = String(p['Nama Produk'] || '').trim();
+        const key = p.Kategori + '||' + namaBersih;
+        if (!grup[key]) grup[key] = { key: key, kategori: p.Kategori, nama: namaBersih, gambar: '', rows: [] };
+        if (!grup[key].gambar && p.Gambar) grup[key].gambar = p.Gambar;
+        grup[key].rows.push(p);
+      });
+      return Object.values(grup);
+    }
+
+    function hargaTampil(grup) {
+      const hargaUnik = [...new Set(grup.rows.map(r => Number(r.Harga)))];
+      if (hargaUnik.length === 1) return formatRupiah(hargaUnik[0]);
+      return 'Mulai ' + formatRupiah(Math.min(...hargaUnik));
+    }
+
+    function dimensiPerluPilihan(rows) {
+      return DIMENSI.filter(dim => {
+        const nilai = new Set(rows.map(r => r[dim]).filter(v => v !== '' && v !== undefined && v !== null));
+        return nilai.size >= 2;
+      });
+    }
+
+    function urutkanNilai(dim, nilai) {
+      if (dim === 'Ukuran') {
+        return nilai.sort((a, b) => {
+          const ia = URUTAN_UKURAN.indexOf(a), ib = URUTAN_UKURAN.indexOf(b);
+          if (ia === -1 && ib === -1) return a.localeCompare(b);
+          if (ia === -1) return 1;
+          if (ib === -1) return -1;
+          return ia - ib;
+        });
+      }
+      return nilai.sort();
+    }
+
+    function barisCocokDimensiLain(rows, dimsLain, pilihan) {
+      return rows.filter(r => dimsLain.every(d => !pilihan[d] || r[d] === pilihan[d]));
+    }
+
+    // Pil kategori — otomatis muncul "Semua" + tiap kategori yang ada di data,
+    // jadi kalau nanti ada kategori baru gak perlu ubah kode
+    function isiFilterKategori() {
+      const wadah = document.getElementById('kategori-pills');
+      const kategoriSet = [...new Set(semuaProduk.map(p => p.Kategori).filter(Boolean))];
+      const daftar = ['', ...kategoriSet];
+      wadah.innerHTML = daftar.map(k => {
+        const aktif = kategoriAktif === k;
+        return `<button type="button" class="pil-kategori ${aktif ? 'aktif' : ''}"
+          onclick="pilihKategori('${k}')">${k === '' ? 'Semua' : k}</button>`;
+      }).join('');
+    }
+
+    function pilihKategori(k) {
+      kategoriAktif = k;
+      isiFilterKategori();
+      renderProduk();
+    }
+
+    function renderProduk() {
+      const kataCari = document.getElementById('cari').value.toLowerCase();
+      const kategori = kategoriAktif;
+
+      const hasil = grupProduk.filter(g => {
+        if (kataCari && !g.nama.toLowerCase().includes(kataCari)) return false;
+        if (kategori && g.kategori !== kategori) return false;
+        return true;
+      });
+
+      const grid = document.getElementById('grid-produk');
+      if (hasil.length === 0) {
+        grid.innerHTML = '<div class="kosong">Tidak ada produk cocok.</div>';
+        return;
+      }
+
+      grid.innerHTML = hasil.map(g => renderKartuGrid(g)).join('');
+    }
+
+    function renderKartuGrid(grup) {
+      const totalStok = grup.rows.reduce((s, r) => s + Number(r.Stok || 0), 0);
+      const habisSemua = totalStok <= 0;
+      return `
+        <button class="kartu-grid" ${habisSemua ? 'disabled' : `onclick="bukaModalProduk('${grup.key}')"`}>
+          <div class="gambar-produk" ${grup.gambar ? `style="background-image:url('${grup.gambar}')"` : ''}>
+            ${!grup.gambar ? '<span class="ikon-fallback">🧺</span>' : ''}
+            ${habisSemua ? '<span class="label-habis">Stok Habis</span>' : ''}
+          </div>
+          <div class="info-grid">
+            <div class="nama-grid">${grup.nama}</div>
+            <div class="harga-grid">${hargaTampil(grup)}</div>
+          </div>
+        </button>`;
+    }
+
+    function bukaModalProduk(groupKey) {
+      modalTerbuka = groupKey;
+      renderModal();
+      document.getElementById('modal-overlay').classList.add('terbuka');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function tutupModal() {
+      modalTerbuka = null;
+      document.getElementById('modal-overlay').classList.remove('terbuka');
+      document.body.style.overflow = '';
+    }
+
+    function renderModal() {
+      if (!modalTerbuka) return;
+      const grup = grupProduk.find(g => g.key === modalTerbuka);
+      if (!grup) { tutupModal(); return; }
+      document.getElementById('modal-konten').innerHTML = renderIsiModal(grup);
+    }
+
+    function renderIsiModal(grup) {
+      if (!pilihanGrup[grup.key]) pilihanGrup[grup.key] = { qty: 1 };
+      const pilihan = pilihanGrup[grup.key];
+      const dimsPerlu = dimensiPerluPilihan(grup.rows);
+
+      let htmlChip = '';
+      dimsPerlu.forEach(dim => {
+        const dimsLain = dimsPerlu.filter(d => d !== dim);
+        const semuaNilai = urutkanNilai(dim, [...new Set(grup.rows.map(r => r[dim]).filter(v => v))]);
+        htmlChip += `
+          <div class="grup-chip">
+            <div class="label-chip">${dim === 'Tipe Lengan' ? 'Lengan' : dim}</div>
+            <div class="chip-baris">
+              ${semuaNilai.map(v => {
+                const kandidat = barisCocokDimensiLain(grup.rows, dimsLain, pilihan).filter(r => r[dim] === v);
+                const adaStok = kandidat.some(r => Number(r.Stok) > 0);
+                const aktif = pilihan[dim] === v;
+                const kelas = ['chip'];
+                if (aktif) kelas.push('aktif');
+                if (!adaStok) kelas.push('habis');
+                return `<div class="${kelas.join(' ')}"
+                  ${adaStok ? `onclick="pilihChip('${grup.key}', '${dim}', '${v}')"` : ''}
+                  >${v}</div>`;
+              }).join('')}
+            </div>
+          </div>`;
+      });
+
+      const semuaTerpilih = dimsPerlu.every(dim => pilihan[dim]);
+      let barisTerpilih = null;
+      if (dimsPerlu.length === 0) {
+        barisTerpilih = grup.rows[0];
+      } else if (semuaTerpilih) {
+        barisTerpilih = grup.rows.find(r => dimsPerlu.every(dim => r[dim] === pilihan[dim]));
+      }
+
+      let htmlInfo, tombolAktif = false;
+      if (barisTerpilih) {
+        const habis = Number(barisTerpilih.Stok) <= 0;
+        const rendah = !habis && Number(barisTerpilih.Stok) <= 5;
+        tombolAktif = !habis;
+        htmlInfo = `
+          <div class="info-pilihan">
+            <span class="harga">${formatRupiah(barisTerpilih.Harga)}</span>
+            <span class="stok ${rendah ? 'rendah' : ''}">${habis ? 'Stok habis' : 'Stok ' + barisTerpilih.Stok}</span>
+          </div>`;
+      } else {
+        htmlInfo = `<div class="info-pilihan"><span class="petunjuk">Lengkapi pilihan di atas</span></div>`;
+      }
+
+      // Foto ikut ganti sesuai varian yang lagi dipilih (misal Lengan Panjang vs
+      // Foto ikut ganti begitu varian (Jurusan/Lengan/Jenis Kelamin) dipilih —
+      // dicocokkan SEKALIGUS semua yang sudah dipilih (misal Jurusan + Lengan
+      // bareng buat Baju Praktik), TIDAK nunggu Ukuran ikut lengkap.
+      let gambarDipakai = grup.gambar;
+      const dimsDipilih = DIMENSI_FOTO.filter(dim => pilihan[dim]);
+      if (dimsDipilih.length) {
+        const barisFoto = grup.rows.find(r =>
+          r.Gambar && dimsDipilih.every(dim => r[dim] === pilihan[dim])
+        );
+        if (barisFoto) gambarDipakai = barisFoto.Gambar;
+      }
+
+      return `
+        <div class="modal-gambar" ${gambarDipakai ? `style="background-image:url('${gambarDipakai}')"` : ''}>
+          ${!gambarDipakai ? '<span class="ikon-fallback">🧺</span>' : ''}
+        </div>
+        <div class="header-produk">
+          <div class="nama">${grup.nama}</div>
+          <div class="kategori">${grup.kategori}</div>
+        </div>
+        ${dimsPerlu.length ? `<div class="baris-dropdown">${htmlChip}</div>` : ''}
+        ${htmlInfo}
+        <div class="baris-aksi">
+          <div class="qty-ctl">
+            <button onclick="ubahQty('${grup.key}', -1)">−</button>
+            <span>${pilihan.qty}</span>
+            <button onclick="ubahQty('${grup.key}', 1)">+</button>
+          </div>
+          <button class="btn-tambah" ${tombolAktif ? '' : 'disabled'}
+            onclick="tambahKeKeranjang(event, '${grup.key}')">Tambah</button>
+        </div>`;
+    }
+
+    function pilihChip(groupKey, dim, value) {
+      const pilihan = pilihanGrup[groupKey];
+      pilihan[dim] = pilihan[dim] === value ? undefined : value;
+      renderModal();
+    }
+
+    function ubahQty(groupKey, delta) {
+      const pilihan = pilihanGrup[groupKey];
+      pilihan.qty = Math.max(1, (pilihan.qty || 1) + delta);
+      renderModal();
+    }
+
+    // Catatan: qty di keranjang cuma dipakai buat susun pesan WA — TIDAK memotong Stok di Sheet.
+    function tambahKeKeranjang(evt, groupKey) {
+      const tombolAsal = evt ? evt.currentTarget : null;
+      const grup = grupProduk.find(g => g.key === groupKey);
+      const pilihan = pilihanGrup[groupKey];
+      const dimsPerlu = dimensiPerluPilihan(grup.rows);
+      const barisTerpilih = dimsPerlu.length === 0
+        ? grup.rows[0]
+        : grup.rows.find(r => dimsPerlu.every(dim => r[dim] === pilihan[dim]));
+      if (!barisTerpilih) return;
+
+      const id = barisTerpilih.ID;
+      const tambah = pilihan.qty || 1;
+
+      if (!keranjang[id]) keranjang[id] = { produk: barisTerpilih, jumlah: 0 };
+      keranjang[id].jumlah += tambah;
+
+      efekTerbangKeKeranjang(tombolAsal);
+      pilihan.qty = 1;
+      renderKeranjang();
+      renderProduk();
+      tutupModal();
+    }
+
+    function efekTerbangKeKeranjang(tombolAsal) {
+      const ikon = document.getElementById('ikon-keranjang');
+      const target = (ikon && ikon.offsetParent !== null) ? ikon : document.querySelector('.panel-keranjang h2');
+      if (!target || !tombolAsal) return;
+
+      const asal = tombolAsal.getBoundingClientRect();
+      const tujuan = target.getBoundingClientRect();
+      const dx = (tujuan.left + tujuan.width / 2) - (asal.left + asal.width / 2);
+      const dy = (tujuan.top + tujuan.height / 2) - (asal.top + asal.height / 2);
+
+      const bola = document.createElement('div');
+      bola.className = 'bola-terbang';
+      bola.style.left = (asal.left + asal.width / 2) + 'px';
+      bola.style.top = (asal.top + asal.height / 2) + 'px';
+      bola.style.setProperty('--dx', dx + 'px');
+      bola.style.setProperty('--dy', dy + 'px');
+      document.body.appendChild(bola);
+
+      requestAnimationFrame(() => bola.classList.add('terbang'));
+      setTimeout(() => {
+        bola.remove();
+        target.classList.add('pop');
+        setTimeout(() => target.classList.remove('pop'), 350);
+      }, 450);
+    }
+
+    function labelVarian(p) {
+      return [p.Jurusan, p['Tipe Lengan'], p.Ukuran].filter(Boolean).join(' · ');
+    }
+
+    function hapusItem(id) {
+      delete keranjang[id];
+      renderKeranjang();
+    }
+
+    function hitungTotal() {
+      return Object.values(keranjang).reduce((sum, item) => sum + item.produk.Harga * item.jumlah, 0);
+    }
+
+    function hitungJumlahItem() {
+      return Object.values(keranjang).reduce((sum, item) => sum + item.jumlah, 0);
+    }
+
+    function renderKeranjang() {
+      const wadah = document.getElementById('daftar-keranjang');
+      const daftar = Object.entries(keranjang);
+
+      if (daftar.length === 0) {
+        wadah.innerHTML = '<div class="kosong">Belum ada barang dipilih.</div>';
+      } else {
+        wadah.innerHTML = daftar.map(([id, item]) => `
+          <div class="baris-item">
+            <div class="info">
+              <div class="nama">${item.produk['Nama Produk']}</div>
+              <div class="varian">${labelVarian(item.produk)}</div>
+            </div>
+            <div class="jml">x${item.jumlah}</div>
+            <div class="subtotal">${formatRupiah(item.produk.Harga * item.jumlah)}</div>
+            <span class="hapus" onclick="hapusItem('${id}')">✕</span>
+          </div>`).join('');
+      }
+
+      const total = hitungTotal();
+      document.getElementById('teks-total').textContent = formatRupiah(total);
+      const badge = document.getElementById('badge-keranjang');
+      if (badge) badge.textContent = hitungJumlahItem();
+      perbaruiTombolSelesai();
+    }
+
+    function perbaruiTombolSelesai() {
+      const total = hitungTotal();
+      document.getElementById('btn-selesai').disabled = (total === 0);
+    }
+
+    function tampilPesan(jenis, teks) {
+      const area = document.getElementById('area-pesan');
+      area.innerHTML = `<div class="pesan ${jenis}">${teks}</div>`;
+      setTimeout(() => { area.innerHTML = ''; }, 4000);
+    }
+
+    // Susun teks pesanan lalu buka WhatsApp — TIDAK memanggil backend apa pun,
+    // jadi Stok di Google Sheet sama sekali tidak berubah dari sini.
+    function kirimKeWhatsapp() {
+      const daftar = Object.values(keranjang);
+      const inputNama = document.getElementById('input-nama');
+      const nama = inputNama.value.trim();
+      const hintNama = document.getElementById('hint-nama');
+
+      if (daftar.length === 0) return;
+
+      if (!nama) {
+        inputNama.classList.add('error');
+        hintNama.classList.add('tampil');
+        inputNama.classList.remove('goyang');
+        void inputNama.offsetWidth; // reset animasi biar bisa geter berkali-kali walau diklik beruntun
+        inputNama.classList.add('goyang');
+        inputNama.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      let teks = 'Halo MIG Digital Printing, saya mau pesan:\n\n';
+      daftar.forEach((item, i) => {
+        const varian = labelVarian(item.produk);
+        teks += `${i + 1}. ${item.produk['Nama Produk']}${varian ? ' (' + varian + ')' : ''} x${item.jumlah} = ${formatRupiah(item.produk.Harga * item.jumlah)}\n`;
+      });
+      teks += `\n*Total: ${formatRupiah(hitungTotal())}*`;
+      teks += `\nNama: ${nama}`;
+
+      const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(teks);
+      window.open(url, '_blank');
+    }
+
+    function toggleKeranjangMobile() {
+      document.querySelector('.panel-keranjang').classList.toggle('buka');
+    }
+
+    document.getElementById('cari').addEventListener('input', renderProduk);
+    document.getElementById('input-nama').addEventListener('input', function () {
+      this.classList.remove('error');
+      document.getElementById('hint-nama').classList.remove('tampil');
+      perbaruiTombolSelesai();
+    });
+    document.getElementById('btn-selesai').addEventListener('click', kirimKeWhatsapp);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modalTerbuka) tutupModal();
+    });
+
+    muatProduk();
+  </script>
+</body>
+</html>
