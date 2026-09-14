@@ -104,7 +104,7 @@
       transition: transform .08s, background .1s;
     }
     .pil-kategori:active { transform: scale(.94); }
-    .pil-kategori.aktif { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pil-kategori.aktif { background: var(--ink); border-color: var(--ink); color: #fff; }
 
     .grid-produk {
       display: grid;
@@ -135,22 +135,36 @@
       align-items: center;
       justify-content: center;
     }
-    .ikon-fallback { font-size: 30px; opacity: .35; }
+    .fallback-foto {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+    .fallback-foto svg { width: 30px; height: 30px; opacity: .4; }
+    .fallback-foto span { font-size: 11px; opacity: .7; }
     .label-habis {
       position: absolute;
       inset: 0;
-      background: rgba(255,255,255,.75);
+      background: rgba(28,36,48,.55);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--warn);
       text-align: center;
     }
+    .label-habis span {
+      background: #fff;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
     .info-grid { padding: 8px 10px 10px; }
-    .nama-grid { font-weight: 700; font-size: 14px; line-height: 1.25; margin-bottom: 3px; }
-    .harga-grid { font-size: 13px; color: var(--accent-dark); font-weight: 700; }
+    .nama-grid { font-weight: 400; font-size: 14px; line-height: 1.5; margin-bottom: 4px; }
+    .harga-grid { font-size: 18px; color: var(--ink); font-weight: 700; }
 
     .kartu-skeleton {
       background: #fff;
@@ -257,7 +271,7 @@
       transition: transform .08s, background .1s;
     }
     .chip:active { transform: scale(.93); }
-    .chip.aktif { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .chip.aktif { background: var(--ink); border-color: var(--ink); color: #fff; }
     .chip.habis {
       opacity: .4;
       text-decoration: line-through;
@@ -705,14 +719,22 @@
       grid.innerHTML = hasil.map(g => renderKartuGrid(g)).join('');
     }
 
+    // Ikon placeholder saat produk belum punya foto — disamakan persis dengan kasir
+    const IKON_FOTO_KOSONG = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+        <path d="M21 15l-5-5L5 21"></path>
+      </svg>`;
+
     function renderKartuGrid(grup) {
       const totalStok = grup.rows.reduce((s, r) => s + Number(r.Stok || 0), 0);
       const habisSemua = totalStok <= 0;
       return `
-        <button class="kartu-grid" ${habisSemua ? 'disabled' : `onclick="bukaModalProduk('${grup.key}')"`}>
-          <div class="gambar-produk" ${grup.gambar ? `style="background-image:url('${grup.gambar}')"` : ''}>
-            ${!grup.gambar ? '<span class="ikon-fallback">🧺</span>' : ''}
-            ${habisSemua ? '<span class="label-habis">Stok Habis</span>' : ''}
+        <button type="button" class="kartu-grid" ${habisSemua ? 'disabled' : `onclick="bukaModalProduk('${grup.key}')"`}>
+          <div class="gambar-produk" style="${grup.gambar ? `background-image:url('${grup.gambar}');` : ''}${habisSemua ? 'filter:grayscale(1);' : ''}">
+            ${!grup.gambar ? `<div class="fallback-foto">${IKON_FOTO_KOSONG}<span>Belum ada foto</span></div>` : ''}
+            ${habisSemua ? '<div class="label-habis"><span>Stok Habis</span></div>' : ''}
           </div>
           <div class="info-grid">
             <div class="nama-grid">${grup.nama}</div>
@@ -805,7 +827,7 @@
 
       return `
         <div class="modal-gambar" ${gambarDipakai ? `style="background-image:url('${gambarDipakai}')"` : ''}>
-          ${!gambarDipakai ? '<span class="ikon-fallback">🧺</span>' : ''}
+          ${!gambarDipakai ? `<div class="fallback-foto">${IKON_FOTO_KOSONG}<span>Belum ada foto</span></div>` : ''}
         </div>
         <div class="header-produk">
           <div class="nama">${grup.nama}</div>
