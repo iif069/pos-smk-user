@@ -791,7 +791,6 @@
         htmlInfo = `<div class="info-pilihan"><span class="petunjuk">Lengkapi pilihan di atas</span></div>`;
       }
 
-      // Foto ikut ganti sesuai varian yang lagi dipilih (misal Lengan Panjang vs
       // Foto ikut ganti begitu varian (Jurusan/Lengan/Jenis Kelamin) dipilih —
       // dicocokkan SEKALIGUS semua yang sudah dipilih (misal Jurusan + Lengan
       // bareng buat Baju Praktik), TIDAK nunggu Ukuran ikut lengkap.
@@ -861,9 +860,19 @@
       tutupModal();
     }
 
+    // FIX: sebelumnya pengecekan visibilitas ikon keranjang pakai
+    // `ikon.offsetParent !== null`. Ini SELALU false untuk elemen yang
+    // `position: fixed` (perilaku standar browser, bukan bug) — dan FAB
+    // keranjang di halaman pembeli ini memang `position: fixed`. Akibatnya
+    // target animasi SELALU jatuh ke elemen cadangan (<h2>Keranjang</h2>)
+    // yang di mode mobile lagi disembunyikan di luar layar, jadi bola
+    // terbang & efek "pop" itu sebenarnya tetap jalan tapi menuju target
+    // yang gak kelihatan. Diganti pakai getComputedStyle().display supaya
+    // deteksi visibilitasnya akurat walau elemennya position: fixed.
     function efekTerbangKeKeranjang(tombolAsal) {
       const ikon = document.getElementById('ikon-keranjang');
-      const target = (ikon && ikon.offsetParent !== null) ? ikon : document.querySelector('.panel-keranjang h2');
+      const ikonTampil = ikon && getComputedStyle(ikon).display !== 'none';
+      const target = ikonTampil ? ikon : document.querySelector('.panel-keranjang h2');
       if (!target || !tombolAsal) return;
 
       const asal = tombolAsal.getBoundingClientRect();
