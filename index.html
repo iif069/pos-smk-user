@@ -364,7 +364,15 @@
     transition: transform .25s ease;
     z-index: 50;
   }
+  .panel-keranjang.menyeret { transition: none; }
   .panel-keranjang.buka { transform: translateY(0); }
+  .drag-handle {
+    width: 36px; height: 4px;
+    background: var(--line);
+    border-radius: 2px;
+    margin: 8px auto 0;
+    flex-shrink: 0;
+  }
   .tutup-keranjang-mobile {
     position: absolute;
     top: 12px; right: 12px;
@@ -538,6 +546,7 @@
     </div>
 
     <div class="panel-keranjang">
+      <div class="drag-handle"></div>
       <button class="tutup-keranjang-mobile" onclick="toggleKeranjangMobile()">✕</button>
       <h2>Keranjang</h2>
       <div id="daftar-keranjang">
@@ -1004,9 +1013,67 @@
       window.open(url, '_blank');
     }
 
-    function toggleKeranjangMobile() {
-      document.querySelector('.panel-keranjang').classList.toggle('buka');
+    function setKeranjangMobile(buka) {
+      const panel = document.querySelector('.panel-keranjang');
+      panel.style.transform = ''; // pastikan gak ada sisa transform dari drag yang nyangkut
+      panel.classList.toggle('buka', buka);
     }
+
+    function toggleKeranjangMobile() {
+      const panel = document.querySelector('.panel-keranjang');
+      setKeranjangMobile(!panel.classList.contains('buka'));
+    }
+
+    // Swipe-to-close: bisa dimulai dari mana aja di dalam sheet, SELAMA daftar
+    // isi keranjang lagi di posisi paling atas (scrollTop 0) — pola bottom-sheet
+    // standar (sama seperti di kasir), biar gak konflik sama scroll isi keranjang.
+    (function aturSwipeKeranjang() {
+      const panel = document.querySelector('.panel-keranjang');
+      let mulaiY = null;
+      let geser = 0;
+      let sedangMenyeret = false;
+
+      function mulai(e) {
+        if (!panel.classList.contains('buka')) { mulaiY = null; return; }
+        mulaiY = e.touches[0].clientY;
+        geser = 0;
+        sedangMenyeret = false;
+      }
+      function bergerak(e) {
+        if (mulaiY === null) return;
+        const deltaY = e.touches[0].clientY - mulaiY;
+        if (!sedangMenyeret) {
+          if (deltaY > 0 && panel.scrollTop <= 0) {
+            sedangMenyeret = true;
+            panel.classList.add('menyeret');
+          } else {
+            return;
+          }
+        }
+        geser = Math.max(0, deltaY);
+        panel.style.transform = `translateY(${geser}px)`;
+        e.preventDefault();
+      }
+      function selesai() {
+        if (mulaiY === null) return;
+        const memangMenyeret = sedangMenyeret;
+        sedangMenyeret = false;
+        mulaiY = null;
+        if (!memangMenyeret) return;
+        panel.classList.remove('menyeret');
+        setKeranjangMobile(geser <= 60);
+        geser = 0;
+      }
+
+      panel.addEventListener('touchstart', mulai, { passive: true });
+      panel.addEventListener('touchmove', bergerak, { passive: false });
+      panel.addEventListener('touchend', selesai);
+      panel.addEventListener('touchcancel', selesai);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && sedangMenyeret) selesai();
+      });
+    })();
 
     document.getElementById('cari').addEventListener('input', renderProduk);
     document.getElementById('input-nama').addEventListener('input', function () {
