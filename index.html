@@ -215,17 +215,67 @@
       width: 100%;
       max-width: 480px;
       max-height: 88vh;
-      overflow-y: auto;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
       border-radius: 16px 16px 0 0;
       padding: 16px;
       position: relative;
       transform: translateY(16px);
       transition: transform .25s ease;
     }
+    /* Gambar sengaja dipisah jadi wrapper sendiri (di luar .modal-scroll):
+       di HP dia nempel diam di atas (gak ikut discroll bareng chip varian),
+       di desktop dia jadi kolom kiri lewat CSS grid di bawah. */
+    .modal-gambar-wrap { flex-shrink: 0; }
+    /* Area ini yang discroll, bukan .modal-sheet — jadi tombol X di luar
+       area ini tetap diam di tempat walau isi modalnya digulir ke bawah. */
+    .modal-scroll {
+      overflow-y: auto;
+      flex: 1;
+      min-height: 0;
+    }
+    /* Footer aksi (qty + tombol Tambah) sengaja diletakkan DI LUAR .modal-scroll
+       supaya selalu kelihatan menempel di bawah modal, gak ikut ke-scroll
+       walau daftar pilihan varian (Jurusan/Lengan/Ukuran) panjang. */
+    .modal-footer {
+      flex-shrink: 0;
+      padding-top: 12px;
+      margin-top: 8px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
     .modal-overlay.terbuka .modal-sheet { transform: translateY(0); }
     @media (min-width: 860px) {
       .modal-overlay { align-items: center; }
       .modal-sheet { border-radius: 16px; }
+      /* Di desktop, space kiri-kanan masih luas — jadi gambar & varian
+         disusun berdampingan (grid 2 kolom) biar semuanya kelihatan
+         sekaligus tanpa perlu scroll. Footer (qty + tombol Tambah)
+         dibentangkan penuh di baris paling bawah. */
+      .modal-sheet {
+        display: grid;
+        grid-template-columns: minmax(220px, 300px) 1fr;
+        grid-template-rows: 1fr auto;
+        grid-template-areas:
+          "gambar konten"
+          "footer footer";
+        column-gap: 24px;
+        max-width: 760px;
+        max-height: 82vh;
+      }
+      .modal-gambar-wrap { grid-area: gambar; }
+      .modal-scroll {
+        grid-area: konten;
+        max-height: 100%;
+        padding-right: 40px; /* jaga jarak dari tombol ✕ di pojok kanan atas */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* produk tanpa varian (info pendek) gak numpuk di atas doang */
+        justify-content: safe center; /* browser modern: kalau kontennya panjang (varian banyak), tetap bisa discroll penuh */
+      }
+      .modal-footer { grid-area: footer; margin-top: 16px; padding-top: 16px; }
+      .modal-gambar { margin-bottom: 0; }
     }
     .modal-tutup {
       position: absolute;
@@ -578,7 +628,11 @@
   <div class="modal-overlay" id="modal-overlay" onclick="tutupModal()">
     <div class="modal-sheet" onclick="event.stopPropagation()">
       <button class="modal-tutup" onclick="tutupModal()">✕</button>
-      <div id="modal-konten"></div>
+      <div class="modal-gambar-wrap" id="modal-gambar-wrap"></div>
+      <div class="modal-scroll">
+        <div id="modal-konten"></div>
+      </div>
+      <div class="modal-footer" id="modal-footer"></div>
     </div>
   </div>
 
@@ -769,9 +823,16 @@
       if (!modalTerbuka) return;
       const grup = grupProduk.find(g => g.key === modalTerbuka);
       if (!grup) { tutupModal(); return; }
-      document.getElementById('modal-konten').innerHTML = renderIsiModal(grup);
+      const hasil = renderIsiModal(grup);
+      document.getElementById('modal-gambar-wrap').innerHTML = hasil.gambar;
+      document.getElementById('modal-konten').innerHTML = hasil.konten;
+      document.getElementById('modal-footer').innerHTML = hasil.footer;
     }
 
+    // Isi modal detail produk: foto (ikut berubah sesuai varian), pilihan chip,
+    // info harga/stok, dan tombol Tambah. Dipecah jadi { gambar, konten, footer }:
+    // gambar & footer dirender di luar area scroll (.modal-gambar-wrap /
+    // .modal-footer) supaya selalu kelihatan tanpa perlu digulir dulu.
     function renderIsiModal(grup) {
       if (!pilihanGrup[grup.key]) pilihanGrup[grup.key] = { qty: 1 };
       const pilihan = pilihanGrup[grup.key];
@@ -834,16 +895,20 @@
         if (barisFoto) gambarDipakai = barisFoto.Gambar;
       }
 
-      return `
+      const gambar = `
         <div class="modal-gambar" ${gambarDipakai ? `style="background-image:url('${gambarDipakai}')"` : ''}>
           ${!gambarDipakai ? `<div class="fallback-foto">${IKON_FOTO_KOSONG}<span>Belum ada foto</span></div>` : ''}
-        </div>
+        </div>`;
+
+      const konten = `
         <div class="header-produk">
           <div class="nama">${grup.nama}</div>
           <div class="kategori">${grup.kategori}</div>
         </div>
         ${dimsPerlu.length ? `<div class="baris-dropdown">${htmlChip}</div>` : ''}
-        ${htmlInfo}
+        ${htmlInfo}`;
+
+      const footer = `
         <div class="baris-aksi">
           <div class="qty-ctl">
             <button onclick="ubahQty('${grup.key}', -1)">−</button>
@@ -853,6 +918,8 @@
           <button class="btn-tambah" ${tombolAktif ? '' : 'disabled'}
             onclick="tambahKeKeranjang(event, '${grup.key}')">Tambah</button>
         </div>`;
+
+      return { gambar, konten, footer };
     }
 
     function pilihChip(groupKey, dim, value) {
