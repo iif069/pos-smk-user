@@ -651,6 +651,73 @@
       transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.25);
       opacity: 0;
     }
+
+    /* Foto produk yang "terbang" ke keranjang saat tombol Tambah ditekan.
+       Gerakannya diatur lewat JS (efekTerbangKeKeranjang), CSS ini hanya rupanya. */
+    .foto-terbang {
+      position: fixed;
+      z-index: 300;
+      pointer-events: none;
+      background-color: #fff;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+      will-change: transform, opacity;
+    }
+
+    /* Kotak konfirmasi di tengah layar: "Berhasil ditambahkan ke keranjang" */
+    .toast-keranjang {
+      position: fixed;
+      left: 50%;
+      top: 42%;
+      z-index: 250;
+      width: max-content;
+      max-width: min(300px, 80vw);
+      padding: 18px 22px 16px;
+      border-radius: 14px;
+      background: rgba(28, 36, 48, .92);
+      color: #fff;
+      text-align: center;
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.92);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .toast-keranjang.tampil {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .toast-keranjang .ikon-centang {
+      width: 36px;
+      height: 36px;
+      margin: 0 auto 10px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toast-keranjang .teks-utama { font-size: 14px; font-weight: 600; line-height: 1.4; }
+    .toast-keranjang .teks-detail { font-size: 12px; line-height: 1.4; margin-top: 4px; opacity: .75; }
+
+    /* Denyut kecil di keranjang saat foto tiba. Di HP sudah ada (di dalam blok
+       media mobile); ini untuk layar lebar, di mana targetnya judul "Keranjang". */
+    @media (min-width: 860px) {
+      .pop { animation: popKeranjangLebar .35s ease; }
+      .panel-keranjang h2.pop { transform-origin: left center; }
+      @keyframes popKeranjangLebar {
+        0% { transform: scale(1); }
+        35% { transform: scale(1.3); }
+        60% { transform: scale(.92); }
+        100% { transform: scale(1); }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .toast-keranjang { transition: none; }
+    }
   </style>
 </head>
 <body>
@@ -717,6 +784,14 @@
       </div>
       <div class="modal-footer" id="modal-footer"></div>
     </div>
+  </div>
+
+  <div class="toast-keranjang" id="toast-keranjang" role="status" aria-live="polite">
+    <div class="ikon-centang">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+    </div>
+    <div class="teks-utama">Berhasil ditambahkan ke keranjang</div>
+    <div class="teks-detail" id="toast-detail"></div>
   </div>
 
   <script>
@@ -1179,47 +1254,108 @@
       if (!keranjang[id]) keranjang[id] = { produk: barisTerpilih, jumlah: 0 };
       keranjang[id].jumlah += tambah;
 
-      efekTerbangKeKeranjang(tombolAsal);
+      // Posisi & foto diambil SEBELUM modal ditutup (setelah ditutup, posisinya hilang).
+      // Foto produk di modal yang "terbang" ke keranjang; kalau produknya tidak
+      // punya foto, dipakai bola kecil dari tombol Tambah seperti sebelumnya.
+      const fotoModal = document.querySelector('.modal-gambar');
+      const cocokFoto = fotoModal && /url\(["']?([^"')]+)["']?\)/.exec(fotoModal.style.backgroundImage || '');
+      efekTerbangKeKeranjang(cocokFoto ? fotoModal : tombolAsal, cocokFoto ? cocokFoto[1] : '');
+      tampilToastKeranjang(barisTerpilih, tambah);
       pilihan.qty = 1;
       renderKeranjang();
       renderProduk();
       tutupModal();
     }
 
-    // FIX: sebelumnya pengecekan visibilitas ikon keranjang pakai
-    // `ikon.offsetParent !== null`. Ini SELALU false untuk elemen yang
-    // `position: fixed` (perilaku standar browser, bukan bug) — dan FAB
-    // keranjang di halaman pembeli ini memang `position: fixed`. Akibatnya
-    // target animasi SELALU jatuh ke elemen cadangan (<h2>Keranjang</h2>)
-    // yang di mode mobile lagi disembunyikan di luar layar, jadi bola
-    // terbang & efek "pop" itu sebenarnya tetap jalan tapi menuju target
-    // yang gak kelihatan. Diganti pakai getComputedStyle().display supaya
-    // deteksi visibilitasnya akurat walau elemennya position: fixed.
-    function efekTerbangKeKeranjang(tombolAsal) {
+    // Kotak konfirmasi di tengah layar. Pakai textContent (bukan innerHTML) karena
+    // isinya nama produk dari Sheet.
+    let pewaktuToast = null;
+    function tampilToastKeranjang(baris, jumlah) {
+      const toast = document.getElementById('toast-keranjang');
+      if (!toast) return;
+      const varian = labelVarian(baris);
+      document.getElementById('toast-detail').textContent =
+        baris['Nama Produk'] + (varian ? ' · ' + varian : '') + ' × ' + jumlah;
+      toast.classList.remove('tampil');
+      void toast.offsetWidth; // paksa animasi mulai ulang kalau ditekan beruntun
+      toast.classList.add('tampil');
+      clearTimeout(pewaktuToast);
+      pewaktuToast = setTimeout(() => toast.classList.remove('tampil'), 1600);
+    }
+
+    // Foto produk melayang dari modal ke ikon keranjang (lintasan melengkung,
+    // mengecil, lalu keranjang "berdenyut"). urlFoto kosong => bola kecil.
+    //
+    // Target: FAB keranjang di HP, judul "Keranjang" di layar lebar. Kelihatan
+    // atau tidaknya FAB dicek dengan getComputedStyle().display — bukan
+    // offsetParent, karena offsetParent selalu null untuk elemen position:fixed
+    // (FAB ini fixed), sehingga dulu target selalu jatuh ke elemen cadangan.
+    function efekTerbangKeKeranjang(elAsal, urlFoto) {
       const ikon = document.getElementById('ikon-keranjang');
       const ikonTampil = ikon && getComputedStyle(ikon).display !== 'none';
       const target = ikonTampil ? ikon : document.querySelector('.panel-keranjang h2');
-      if (!target || !tombolAsal) return;
+      if (!target || !elAsal) return;
 
-      const asal = tombolAsal.getBoundingClientRect();
+      function denyut() {
+        target.classList.add('pop');
+        setTimeout(() => target.classList.remove('pop'), 350);
+      }
+
+      // Pengguna yang mematikan animasi di HP-nya: cukup denyut keranjang + kotak konfirmasi.
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        denyut();
+        return;
+      }
+
+      const asal = elAsal.getBoundingClientRect();
       const tujuan = target.getBoundingClientRect();
-      const dx = (tujuan.left + tujuan.width / 2) - (asal.left + asal.width / 2);
-      const dy = (tujuan.top + tujuan.height / 2) - (asal.top + asal.height / 2);
+      const x0 = asal.left + asal.width / 2;
+      const y0 = asal.top + asal.height / 2;
+      const x1 = ikonTampil ? tujuan.left + tujuan.width / 2 : tujuan.left + 36;
+      const y1 = tujuan.top + tujuan.height / 2;
 
+      if (urlFoto && typeof Element.prototype.animate === 'function') {
+        const sisi = Math.max(56, Math.min(asal.width, asal.height, 140));
+        const foto = document.createElement('div');
+        foto.className = 'foto-terbang';
+        foto.style.width = sisi + 'px';
+        foto.style.height = sisi + 'px';
+        foto.style.left = (x0 - sisi / 2) + 'px';
+        foto.style.top = (y0 - sisi / 2) + 'px';
+        foto.style.backgroundImage = "url('" + urlFoto + "')";
+        document.body.appendChild(foto);
+
+        // Lintasan melengkung (kurva Bezier): naik sedikit dulu, baru meluncur ke keranjang.
+        const xc = (x0 + x1) / 2;
+        const yc = Math.min(y0, y1) - 90;
+        const langkah = 16;
+        const frames = [];
+        for (let i = 0; i <= langkah; i++) {
+          const t = i / langkah, u = 1 - t;
+          const x = u * u * x0 + 2 * u * t * xc + t * t * x1;
+          const y = u * u * y0 + 2 * u * t * yc + t * t * y1;
+          frames.push({
+            offset: t,
+            transform: 'translate(' + (x - x0) + 'px, ' + (y - y0) + 'px) scale(' + (1 - 0.8 * t) + ')',
+            opacity: t < 0.85 ? 1 : 1 - ((t - 0.85) / 0.15) * 0.7
+          });
+        }
+        const anim = foto.animate(frames, { duration: 750, easing: 'cubic-bezier(.45,0,.55,1)', fill: 'forwards' });
+        anim.onfinish = () => { foto.remove(); denyut(); };
+        return;
+      }
+
+      // Cadangan: bola kecil dari tombol Tambah (produk tanpa foto)
       const bola = document.createElement('div');
       bola.className = 'bola-terbang';
-      bola.style.left = (asal.left + asal.width / 2) + 'px';
-      bola.style.top = (asal.top + asal.height / 2) + 'px';
-      bola.style.setProperty('--dx', dx + 'px');
-      bola.style.setProperty('--dy', dy + 'px');
+      bola.style.left = x0 + 'px';
+      bola.style.top = y0 + 'px';
+      bola.style.setProperty('--dx', (x1 - x0) + 'px');
+      bola.style.setProperty('--dy', (y1 - y0) + 'px');
       document.body.appendChild(bola);
 
       requestAnimationFrame(() => bola.classList.add('terbang'));
-      setTimeout(() => {
-        bola.remove();
-        target.classList.add('pop');
-        setTimeout(() => target.classList.remove('pop'), 350);
-      }, 450);
+      setTimeout(() => { bola.remove(); denyut(); }, 450);
     }
 
     function labelVarian(p) {
