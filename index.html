@@ -333,10 +333,25 @@
     /* HP: foto dikecilkan kalau produknya punya banyak pilihan (jurusan/lengan/
        ukuran), supaya chip pilihan dapat tempat lebih luas dan gak perlu digulir jauh. */
     @media (max-width: 859px) {
-      .modal-gambar.ringkas { max-height: 26vh; }
-      .modal-scroll { padding-bottom: 8px; }
+      .modal-gambar.ringkas { max-height: 28vh; }
+      .modal-scroll { padding-bottom: 14px; }
     }
-    .modal-sheet .baris-dropdown { margin-top: 6px; }
+    /* Foto produk ditampilkan UTUH (bukan dipotong memenuhi kotak). Sisi kosong
+       di kiri-kanan/atas-bawah diisi putih, sama dengan latar foto produknya. */
+    .modal-gambar.ada-foto {
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: #fff;
+    }
+    /* Tiap kelompok pilihan (Jurusan / Lengan / Ukuran) dipisah garis tipis +
+       jarak lega, biar tidak terlihat dempet. Jarak antar-kelompok diatur di
+       sini (gap bawaan dimatikan supaya tidak dobel). */
+    .modal-sheet .baris-dropdown { margin-top: 10px; gap: 0; }
+    .grup-chip + .grup-chip {
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+    }
     .modal-sheet .baris-aksi { margin-top: 14px; }
     .ket-produk { font-size: 13px; line-height: 1.5; color: var(--muted); margin-top: 6px; }
 
@@ -751,8 +766,11 @@
       return 'Rp ' + Number(angka).toLocaleString('id-ID');
     }
 
+    // Nama produk dinormalkan sebelum dicocokkan: huruf kecil, spasi rapi, dan
+    // "praktek" dianggap sama dengan "praktik" (di Sheet tertulis "Baju Praktek",
+    // di banner "Baju Praktik") — jadi keduanya cocok dengan satu entri.
     function kunciNama(nama) {
-      return String(nama || '').trim().toLowerCase();
+      return String(nama || '').trim().replace(/\s+/g, ' ').toLowerCase().replace(/praktek/g, 'praktik');
     }
     function infoProduk(nama) {
       return INFO_PRODUK[kunciNama(nama)] || {};
@@ -824,7 +842,9 @@
         '<button type="button" class="btn-coba-lagi" onclick="muatProduk()">Coba lagi</button></div>';
     }
 
-    function muatProduk() {
+    // modeLama = true: pakai alamat tanpa "action" (dipakai kalau Apps Script
+    // belum di-deploy ulang dan belum mengenal getProdukPembeli).
+    function muatProduk(modeLama) {
       // Ada salinan lama di HP? Tampilkan dulu; kalau tidak, skeleton.
       const cache = bacaCache();
       if (cache) terapkanData(cache); else tampilSkeleton(8);
@@ -847,6 +867,10 @@
         bersihkan();
 
         if (!respon || !respon.sukses) {
+          if (!modeLama && respon && /tidak dikenal/i.test(respon.error || '')) {
+            muatProduk(true); // Apps Script versi lama: coba jalur lama
+            return;
+          }
           // Salinan lama tetap dipakai kalau ada; error cuma ditampilkan kalau layar kosong.
           if (!adaCache) tampilGagalMuat(respon && respon.error ? respon.error : '');
           return;
@@ -855,7 +879,7 @@
         terapkanData(respon.data);
       };
 
-      tagScript.src = URL_API + '?callback=' + namaCallback;
+      tagScript.src = URL_API + '?' + (modeLama ? '' : 'action=getProdukPembeli&') + 'callback=' + namaCallback;
       tagScript.onerror = function () {
         if (selesai) return;
         bersihkan();
@@ -1099,7 +1123,7 @@
       }
 
       const gambar = `
-        <div class="modal-gambar ${dimsPerlu.length ? 'ringkas' : ''}" ${gambarDipakai ? `style="background-image:url('${kecilkanGambar(gambarDipakai, 800)}')"` : ''}>
+        <div class="modal-gambar ${dimsPerlu.length ? 'ringkas' : ''} ${gambarDipakai ? 'ada-foto' : ''}" ${gambarDipakai ? `style="background-image:url('${kecilkanGambar(gambarDipakai, 800)}')"` : ''}>
           ${!gambarDipakai ? `<div class="fallback-foto">${IKON_FOTO_KOSONG}<span>Belum ada foto</span></div>` : ''}
         </div>`;
 
