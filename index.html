@@ -296,7 +296,7 @@
       .modal-scroll {
         grid-area: konten;
         max-height: 100%;
-        padding-right: 40px; /* jaga jarak dari tombol ✕ di pojok kanan atas */
+        padding-right: 40px; /* jaga jarak dari tombol <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg> di pojok kanan atas */
         display: flex;
         flex-direction: column;
         justify-content: center; /* produk tanpa varian (info pendek) gak numpuk di atas doang */
@@ -745,7 +745,7 @@
 
     <div class="panel-keranjang">
       <div class="drag-handle"></div>
-      <button class="tutup-keranjang-mobile" onclick="toggleKeranjangMobile()">✕</button>
+      <button class="tutup-keranjang-mobile" onclick="toggleKeranjangMobile()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
       <h2>Keranjang</h2>
       <div id="daftar-keranjang">
         <div class="kosong">Belum ada barang dipilih.</div>
@@ -779,7 +779,7 @@
 
   <div class="modal-overlay" id="modal-overlay" onclick="tutupModal()">
     <div class="modal-sheet" onclick="event.stopPropagation()">
-      <button class="modal-tutup" onclick="tutupModal()">✕</button>
+      <button class="modal-tutup" onclick="tutupModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
       <div class="modal-gambar-wrap" id="modal-gambar-wrap"></div>
       <div class="modal-scroll">
         <div id="modal-konten"></div>
@@ -1392,7 +1392,7 @@
             </div>
             <div class="jml">x${item.jumlah}</div>
             <div class="subtotal">${formatRupiah(item.produk.Harga * item.jumlah)}</div>
-            <span class="hapus" onclick="hapusItem('${id}')">✕</span>
+            <span class="hapus" onclick="hapusItem('${id}')"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
           </div>`).join('');
       }
 
