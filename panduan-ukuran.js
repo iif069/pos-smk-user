@@ -40,7 +40,7 @@
   lightbox.innerHTML =
     '<div class="lightbox-kotak">' +
       '<div class="lightbox-kepala"><span id="lightbox-judul"></span>' +
-        '<button type="button" id="lightbox-tutup" aria-label="Tutup">✕</button></div>' +
+        '<button type="button" id="lightbox-tutup" aria-label="Tutup"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div>' +
       '<div class="lightbox-isi" id="lightbox-isi"></div>' +
     '</div>';
   document.body.appendChild(lightbox);
