@@ -90,6 +90,9 @@
     .app-header h1 { font-size: 15px; margin: 0; letter-spacing: .2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .app-header .header-sub { font-size: 11.5px; color: var(--muted); display: block; margin-top: 1px; }
     .badge-status {
+      display: block;
+      margin-top: 8px;
+      width: fit-content;
       font-size: 10.5px;
       font-weight: 700;
       padding: 2px 9px;
@@ -98,7 +101,7 @@
       color: #1a8a3d;
       flex-shrink: 0;
     }
-    .badge-status.tutup { background: #f1efe9; color: var(--muted); }
+    .badge-status.tutup { background: #fbe9e5; color: var(--warn); }
     .header-aksi { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
     .btn-icon {
       position: relative;
@@ -203,6 +206,7 @@
 
     /* ---------- Kartu produk ---------- */
     .grid-produk {
+      align-items: start;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 10px;
@@ -837,11 +841,11 @@
       <header class="app-header">
         <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
         <div class="header-teks">
-          <div class="header-judul-row">
+          <div>
             <h1>MIG Digital Printing</h1>
             <span class="badge-status" id="badge-status">BUKA</span>
           </div>
-          <span class="header-sub">Katalog Resmi Sekolah &amp; Cetak</span>
+          
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon" onclick="gantiHalaman('keranjang')" aria-label="Keranjang">
@@ -856,9 +860,9 @@
 
       <div class="konten-dgn-nav" id="konten-katalog">
         <div class="hero-banner">
-          <span class="hero-pill">Mitra Resmi Koperasi Sekolah</span>
+          <span class="hero-pill">MIG Digital Printing</span>
           <h2>Katalog Seragam &amp; Atribut Sekolah</h2>
-          <p>Pesan seragam, atribut bordir, &amp; cetakan sekolah mudah cepat via WhatsApp.</p>
+          <p>Pesan seragam, &amp; atribut sekolah mudah cepat via WhatsApp.</p>
           <div class="hero-jadwal">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg>
             <span>Pesanan bisa diambil jam 3 sore</span>
@@ -885,11 +889,11 @@
       <header class="app-header">
         <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
         <div class="header-teks">
-          <div class="header-judul-row">
+          <div>
             <h1>MIG Digital Printing</h1>
             <span class="badge-status badge-status-2" id="badge-status-2">BUKA</span>
           </div>
-          <span class="header-sub">Katalog Resmi Sekolah &amp; Cetak</span>
+          
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
@@ -1305,6 +1309,7 @@
       const grup = {};
       list.forEach(p => {
         const namaBersih = String(p['Nama Produk'] || '').trim();
+        if (!namaBersih) return;
         const key = p.Kategori + '||' + namaBersih;
         if (!grup[key]) grup[key] = { key: key, kategori: p.Kategori, nama: namaBersih, gambar: '', rows: [] };
         if (!grup[key].gambar && p.Gambar) grup[key].gambar = p.Gambar;
@@ -1427,7 +1432,7 @@
           <div class="gambar-produk" style="${habisSemua ? 'filter:grayscale(1);' : ''}">
             <span class="badge-varian">${labelBadgeVarian(dimsPerlu)}</span>
             ${isiGambar}
-            ${!habisSemua ? `<span class="badge-stok ${rendah ? 'rendah' : ''}"><span class="dot"></span>${totalStok} pcs</span>` : ''}
+            ${!habisSemua ? `<span class="badge-stok ${rendah ? 'rendah' : ''}"><span class="dot"></span>${rendah ? 'Sisa ' + totalStok + ' pcs' : 'Tersedia'}</span>` : ''}
             ${habisSemua ? '<div class="label-habis"><span>Stok Habis</span></div>' : ''}
           </div>
           <div class="info-grid">
