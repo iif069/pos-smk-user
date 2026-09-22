@@ -1,33 +1,54 @@
 // ============================================================================
 // keranjang-stepper.js — KHUSUS HALAMAN PEMBELI. Mengganti teks statis "x1" di
-// tiap baris keranjang jadi tombol stepper (− dan +), sama seperti di kasir.
-// Menekan − sampai 0 langsung menghapus barisnya (disamakan dengan kasir),
-// bukan dibiarkan di angka 0.
+// tiap baris keranjang jadi tombol stepper (− dan +), disamakan ukurannya
+// dengan stepper di keranjang kasir (kecil dan ramping, bukan sebesar stepper
+// di jendela detail produk).
+//
+// Menekan − saat jumlahnya tinggal 1 akan menghapus barisnya — kalau
+// konfirmasi-hapus.js juga dipasang di halaman ini, akan muncul dulu kotak
+// "Apakah Anda yakin untuk menghapus?"; kalau tidak, langsung terhapus.
 //
 // Keranjang pembeli hanya dipakai untuk menyusun pesan WhatsApp, jadi TIDAK
 // ada pengecekan batas stok di sini (beda dengan kasir) — pembeli bebas
 // menambah jumlah, dan stok sebenarnya baru dicek nanti pas barang diambil.
 //
-// Tombol stepper memakai kelas .qty-ctl yang sudah ada di style pembeli
-// (dipakai juga di jendela detail produk), jadi tampilannya otomatis serasi
-// tanpa CSS tambahan.
-//
 // File ini harus dimuat SETELAH script utama di index.html, karena memakai
-// fungsi dan variabel di dalamnya (keranjang, renderKeranjang, hapusItem).
+// fungsi dan variabel di dalamnya (keranjang, renderKeranjang).
 // ============================================================================
 (function () {
+  // Ukuran & warna disamakan persis dengan .jml-ctl di kasir, supaya stepper
+  // di baris keranjang tidak sebesar stepper di jendela detail produk (.qty-ctl).
+  const css = [
+    '.jml-ctl { display:flex; align-items:center; gap:4px; border:1px solid var(--line); border-radius:6px; padding:1px 4px; }',
+    '.jml-ctl button { width:26px; height:26px; border:none; background:none; font-size:14px; cursor:pointer; color:var(--ink); font-family:inherit; }',
+    '.jml-ctl span { min-width:14px; text-align:center; font-size:13px; }'
+  ].join('\n');
+  const styleEl = document.createElement('style');
+  styleEl.textContent = css;
+  document.head.appendChild(styleEl);
+
+  function hapusSekarang(id) {
+    delete keranjang[id];
+    renderKeranjang();
+  }
+
   function ubahJumlah(id, delta) {
     const item = keranjang[id];
     if (!item) return;
     const baru = item.jumlah + delta;
-    if (baru <= 0) {
-      delete keranjang[id];
-    } else {
+    if (baru > 0) {
       item.jumlah = baru;
+      renderKeranjang();
+      return;
     }
-    renderKeranjang();
+    // Jumlah jadi 0: konfirmasi dulu kalau konfirmasi-hapus.js terpasang,
+    // kalau tidak, hapus langsung (tetap aman dipakai sendirian).
+    if (typeof window.tampilKonfirmasiHapus === 'function') {
+      window.tampilKonfirmasiHapus(function () { hapusSekarang(id); });
+    } else {
+      hapusSekarang(id);
+    }
   }
-  window.ubahJumlahKeranjangPembeli = ubahJumlah; // dipakai oleh onclick di bawah
 
   function pasangStepper() {
     document.querySelectorAll('#daftar-keranjang .baris-item').forEach(function (baris) {
@@ -41,16 +62,14 @@
       if (!id) return;
 
       const stepper = document.createElement('div');
-      stepper.className = 'qty-ctl';
+      stepper.className = 'jml-ctl';
       stepper.innerHTML =
         '<button type="button" aria-label="Kurangi jumlah">\u2212</button>' +
         '<span>' + lamaJml.textContent.replace(/^x/, '') + '</span>' +
         '<button type="button" aria-label="Tambah jumlah">+</button>';
 
-      const tombolKurang = stepper.children[0];
-      const tombolTambah = stepper.children[2];
-      tombolKurang.addEventListener('click', function () { ubahJumlah(id, -1); });
-      tombolTambah.addEventListener('click', function () { ubahJumlah(id, 1); });
+      stepper.children[0].addEventListener('click', function () { ubahJumlah(id, -1); });
+      stepper.children[2].addEventListener('click', function () { ubahJumlah(id, 1); });
 
       lamaJml.replaceWith(stepper);
     });
