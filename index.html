@@ -454,10 +454,6 @@
     .keranjang-judul-wrap { padding: 14px 16px 4px; }
     .keranjang-judul-baris { display: flex; align-items: center; gap: 8px; }
     .keranjang-judul-baris h2 { font-size: 21px; margin: 0; }
-    .pill-jenis {
-      font-size: 11px; font-weight: 700; color: var(--accent);
-      background: var(--accent-light); padding: 3px 10px; border-radius: 20px;
-    }
     .keranjang-subjudul { font-size: 12.5px; color: var(--muted); margin: 3px 0 0; }
 
     .daftar-keranjang-halaman { padding: 8px 16px 4px; display: flex; flex-direction: column; gap: 10px; }
@@ -666,7 +662,7 @@
     .btn-buka-wa svg { width: 19px; height: 19px; }
     .btn-buka-wa .dot-online { width: 8px; height: 8px; border-radius: 50%; background: #c8ffd9; }
     .btn-salin {
-      border: 1px solid var(--line); border-radius: 12px; background: var(--accent-light); color: var(--accent-dark);
+      border: 1px solid var(--line); border-radius: 12px; background:#00000015; color: var(--ink);
       font-family: inherit; font-size: 13.5px; font-weight: 700;
       padding: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
     }
@@ -913,7 +909,6 @@
         <div class="keranjang-judul-wrap">
           <div class="keranjang-judul-baris">
             <h2>Keranjang Saya</h2>
-            <span class="pill-jenis" id="pill-jenis-produk">0 Jenis Produk</span>
           </div>
           <p class="keranjang-subjudul" id="keranjang-subjudul">Belum ada barang dipilih.</p>
         </div>
@@ -1750,7 +1745,7 @@
       const totalPcs = hitungJumlahItem();
       const total = hitungTotal();
 
-      document.getElementById('pill-jenis-produk').textContent = jenisProduk + ' Jenis Produk';
+      
       document.getElementById('keranjang-subjudul').textContent = jenisProduk
         ? totalPcs + ' item terpilih siap diproses'
         : 'Belum ada barang dipilih.';
