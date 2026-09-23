@@ -1576,10 +1576,6 @@
         <div class="header-produk">
           <div>
             <div class="nama">${grup.nama}</div>
-            <div class="baris-harga-stok">
-              <span class="harga-modal">${hargaTampil(grup)}${satuan}</span>
-              ${!habisTotal(grup) ? `<span class="pill-stok-modal ${totalStok <= 8 ? 'rendah' : ''}">Stok: ${totalStok} pcs</span>` : ''}
-            </div>
             ${hargaFlat ? '<div class="catatan-flat">Semua ukuran harga sama (flat price)</div>' : ''}
           </div>
           <div class="kategori">${grup.kategori}</div>
