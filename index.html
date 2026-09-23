@@ -531,6 +531,7 @@
     .ringkasan-bayar h4 { font-size: 14px; margin: 0 0 10px; }
     .ringkasan-baris { display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 8px; color: var(--ink); }
     .ringkasan-baris:last-child { margin-bottom: 0; }
+    .baris-subtotal { font-size: 15px; font-weight: 700; }
     .ringkasan-baris .label-jam { display: flex; align-items: center; gap: 4px; }
     .ringkasan-baris .label-jam svg { width: 13px; height: 13px; color: var(--muted); }
     .pill-jam {
@@ -922,7 +923,7 @@
 
         <div class="ringkasan-bayar">
           <h4>Ringkasan Pembayaran</h4>
-          <div class="ringkasan-baris">
+          <div class="ringkasan-baris baris-subtotal">
             <span id="label-subtotal-produk">Subtotal Produk</span>
             <span id="nilai-subtotal-produk">Rp 0</span>
           </div>
