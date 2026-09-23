@@ -618,8 +618,7 @@
 
     .preview-judul-baris { display: flex; justify-content: space-between; align-items: center; margin: 18px 16px 8px; }
     .preview-judul-baris .kiri { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; }
-    .preview-judul-baris .kiri svg { width: 15px; height: 15px; color: var(--accent); }
-    .preview-judul-baris .tag { font-size: 10.5px; font-weight: 700; color: var(--ink); }
+    .preview-judul-baris .kiri svg { width: 15px; height: 15px; color: var(--ink); }
 
     .bungkus-preview-wa { margin: 0 16px; border-radius: 14px; overflow: hidden; background: #dcf7e3; padding: 12px; }
     .kepala-preview-wa { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; padding: 0 2px; }
@@ -660,7 +659,6 @@
       padding: 14px; display: flex; align-items: center; justify-content: center; gap: 9px; cursor: pointer;
     }
     .btn-buka-wa svg { width: 19px; height: 19px; }
-    .btn-buka-wa .dot-online { width: 8px; height: 8px; border-radius: 50%; background: #c8ffd9; }
     .btn-salin {
       border: 1px solid var(--line); border-radius: 12px; background:#00000015; color: var(--ink);
       font-family: inherit; font-size: 13.5px; font-weight: 700;
@@ -670,8 +668,8 @@
 
     .footer-trust { padding: 4px 16px 24px; display: flex; flex-direction: column; gap: 14px; }
     .footer-trust .baris-trust { display: flex; gap: 10px; align-items: flex-start; }
-    .footer-trust .ikon-trust { width: 30px; height: 30px; border-radius: 8px; background: var(--accent-light); color: var(--accent); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .footer-trust .ikon-trust svg { width: 15px; height: 15px; }
+    .footer-trust .ikon-trust { width: 30px; height: 30px; border-radius: 8px; background: #00000015 ; color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .footer-trust .ikon-trust svg { width: 16px; height: 16px; }
     .footer-trust .judul-trust { font-size: 14px; font-weight: 700; }
     .footer-trust .ket-trust { font-size: 12px; color: var(--muted); margin-top: 4px; }
     .goyang { animation: goyangInput .4s ease; }
@@ -993,7 +991,7 @@
 
         <div class="preview-judul-baris">
           <span class="kiri"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>Pratinjau Pesan Otomatis</span>
-          <span class="tag">Tersusun Otomatis</span>
+          
         </div>
         <div class="bungkus-preview-wa">
           <div class="kepala-preview-wa">
@@ -1011,7 +1009,6 @@
         <div class="aksi-konfirmasi">
           <div id="area-pesan-konfirmasi"></div>
           <button type="button" class="btn-buka-wa" id="btn-buka-wa" onclick="bukaWhatsapp()">
-            <span class="dot-online"></span>
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg>
             Buka WhatsApp Sekarang
           </button>
