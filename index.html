@@ -162,8 +162,8 @@
     .hero-banner p { font-size: 13px; line-height: 1.5; margin: 0 0 12px; opacity: .92; }
     .hero-jadwal { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }
     .hero-jadwal svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .hero-banner .badge-status { display: inline-block; background: rgba(255,255,255,.22); color: #fff; padding: 5px 12px; font-size: 11px; margin-bottom: 10px; }
-    .hero-banner .badge-status.tutup { background: rgba(0,0,0,.25); color: #ffd7d7; }
+    .hero-banner .badge-status { display: inline-block; background: #1a8a3d; color: #fff; padding: 5px 12px; font-size: 11px; margin-bottom: 10px; }
+    .hero-banner .badge-status.tutup { background: var(--warn); color: #fff; }
 
     /* ---------- Cari & kategori ---------- */
     .panel-produk { padding: 14px 16px; flex: 1; }
@@ -442,8 +442,8 @@
     }
     .btn-kembali-belanja {
       display: flex; align-items: center; gap: 6px;
-      border: none; color: var(--ink);
-      font-family: inherit; font-size: 12px; font-weight: 700;
+      border: none; background:none; var(--ink);
+      font-family: inherit; font-size: 14px; font-weight: 700;
       padding: 8px 14px; border-radius: 20px; cursor: pointer;
     }
     .btn-kembali-belanja svg { width: 14px; height: 14px; }
@@ -564,7 +564,7 @@
     .btn-ubah-pesanan {
       display: flex; align-items: center; gap: 5px;
       border: none; background: none; color: var(--ink);
-      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0;
+      font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 0;
     }
     .btn-ubah-pesanan svg { width: 14px; height: 14px; }
     .pill-admin-online { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #1a8a3d; }
@@ -663,7 +663,7 @@
     }
     .btn-salin svg { width: 16px; height: 16px; }
 
-    .footer-trust { padding: 24px 16px 24px; display: flex; flex-direction: column; gap: 14px; }
+    .footer-trust { padding: 24px 16px 24px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); margin-top: 8px; }
     .footer-trust .baris-trust { display: flex; gap: 10px; align-items: flex-start; }
     .footer-trust .ikon-trust { width: 30px; height: 30px; border-radius: 8px; background: #00000015 ; color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .footer-trust .ikon-trust svg { width: 16px; height: 16px; }
@@ -840,7 +840,7 @@
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           </button>
         </div>
       </header>
@@ -883,7 +883,7 @@
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           </button>
         </div>
       </header>
@@ -947,7 +947,7 @@
         <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing" style="width:24px;height:24px;">
         <span class="judul-halaman">Konfirmasi Pesanan</span>
         <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         </button>
       </header>
 
@@ -987,7 +987,7 @@
         </div>
         <div class="bungkus-preview-wa">
           <div class="kepala-preview-wa">
-            <span class="avatar-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg></span>
+            <span class="avatar-wa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
             <div><div class="nama-admin">Admin MIG Digital Printing</div><div class="peran-admin">CS Counter</div></div>
           </div>
           <div class="gelembung-preview" id="gelembung-preview"></div>
