@@ -1428,7 +1428,7 @@
           <div class="gambar-produk" style="${habisSemua ? 'filter:grayscale(1);' : ''}">
             <span class="badge-varian">${labelBadgeVarian(dimsPerlu)}</span>
             ${isiGambar}
-            ${!habisSemua ? `<span class="badge-stok ${rendah ? 'rendah' : ''}"><span class="dot"></span>${totalStok} pcs</span>` : ''}
+            ${!habisSemua ? `<span class="badge-stok ${rendah ? 'rendah' : ''}"><span class="dot"></span>${rendah ? 'Sisa ' + totalStok + ' pcs' : 'Tersedia'}</span>` : ''}
             ${habisSemua ? '<div class="label-habis"><span>Stok Habis</span></div>' : ''}
           </div>
           <div class="info-grid">
