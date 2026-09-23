@@ -919,17 +919,6 @@
 
         <div class="daftar-keranjang-halaman" id="daftar-keranjang"></div>
 
-        <div class="catatan-pesanan-box">
-          <div class="catatan-pesanan-judul">
-            <span><svg viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>Catatan Pesanan Khusus</span>
-            <span class="opsional">Opsional</span>
-          </div>
-          <textarea class="catatan-pesanan" id="catatan-pesanan" placeholder="Tuliskan catatan khusus (misal: tulisan bordir topi, nama anak, nomor kelas, atau batas waktu pengerjaan)..."></textarea>
-          <div class="catatan-hint">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
-            <span>Format file cetak &amp; logo akan diminta langsung di chat WA.</span>
-          </div>
-        </div>
 
         <div class="ringkasan-bayar">
           <h4>Ringkasan Pembayaran</h4>
@@ -1004,13 +993,6 @@
             </div>
             <div class="hint-nama" id="hint-nama">Isi nama dulu ya, biar pesanannya jelas.</div>
           </div>
-          <div class="field-pemesan">
-            <label for="input-wa-konfirmasi">Nomor WhatsApp Aktif</label>
-            <div class="field-input-ikon">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg>
-              <input type="tel" id="input-wa-konfirmasi" placeholder="0812-3456-7890" autocomplete="tel" inputmode="tel">
-            </div>
-          </div>
         </div>
 
         <div class="preview-judul-baris">
@@ -1019,7 +1001,7 @@
         </div>
         <div class="bungkus-preview-wa">
           <div class="kepala-preview-wa">
-            <span class="avatar-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg></span>
+            <span class="avatar-wa"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg></span>
             <div><div class="nama-admin">Admin MIG Digital Printing</div><div class="peran-admin">CS Counter &amp; Cetak Custom</div></div>
           </div>
           <div class="gelembung-preview" id="gelembung-preview"></div>
@@ -1845,7 +1827,6 @@
       });
       teks += `\nTotal Estimasi: ${formatRupiah(hitungTotal())}`;
       teks += `\nNama: ${namaPembeli || '-'}`;
-      if (nomorWaPembeli) teks += `\nNo. WhatsApp: ${nomorWaPembeli}`;
       if (catatanPesanan) teks += `\nCatatan: ${catatanPesanan}`;
       return teks;
     }
@@ -1861,7 +1842,6 @@
       });
       html += `<div class="baris-rincian" style="margin-top:6px;font-weight:700;"><span>Total Estimasi:</span><span>${formatRupiah(hitungTotal())}</span></div>`;
       html += `<div class="catatan-nama"><b>Nama:</b> ${namaPembeli || '-'}</div>`;
-      if (nomorWaPembeli) html += `<div class="catatan-nama"><b>No. WhatsApp:</b> ${nomorWaPembeli}</div>`;
       if (catatanPesanan) html += `<div class="catatan-nama"><b>Catatan:</b> ${catatanPesanan}</div>`;
       html += `<div class="waktu-preview">${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ✓✓</div>`;
       wadah.innerHTML = html;
@@ -1901,7 +1881,6 @@
 
     function salinFormatPesanan() {
       namaPembeli = document.getElementById('input-nama-konfirmasi').value.trim();
-      nomorWaPembeli = document.getElementById('input-wa-konfirmasi').value.trim();
       const teks = buatTeksPesanan();
       const tampilkanSukses = () => tampilPesan('area-pesan-konfirmasi', 'sukses', 'Format pesanan disalin.');
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1933,7 +1912,6 @@
       }
       if (nama === 'konfirmasi') {
         document.getElementById('input-nama-konfirmasi').value = namaPembeli;
-        document.getElementById('input-wa-konfirmasi').value = nomorWaPembeli;
         renderPratinjauPesan();
       }
       renderKeranjang(); // perbarui status mini-cart-bar (tampil hanya di katalog)
@@ -1972,17 +1950,11 @@
     setInterval(perbaruiStatusBuka, 5 * 60 * 1000);
 
     document.getElementById('cari').addEventListener('input', renderProduk);
-    document.getElementById('catatan-pesanan').addEventListener('input', function () {
-      catatanPesanan = this.value;
-    });
+    
     document.getElementById('input-nama-konfirmasi').addEventListener('input', function () {
       namaPembeli = this.value;
       this.classList.remove('error');
       document.getElementById('hint-nama').classList.remove('tampil');
-      renderPratinjauPesan();
-    });
-    document.getElementById('input-wa-konfirmasi').addEventListener('input', function () {
-      nomorWaPembeli = this.value;
       renderPratinjauPesan();
     });
     document.addEventListener('keydown', function (e) {
