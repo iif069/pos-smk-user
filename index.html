@@ -162,7 +162,7 @@
     .hero-banner p { font-size: 13px; line-height: 1.5; margin: 0 0 12px; opacity: .92; }
     .hero-jadwal { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }
     .hero-jadwal svg { width: 15px; height: 15px; flex-shrink: 0; }
-    .hero-banner .badge-status { display: inline-block; background: #1a8a3d; color: #fff; padding: 5px 12px; font-size: 11px; margin-bottom: 10px; }
+    .hero-banner .badge-status { display: inline-block; background: #25D366; color: #fff; padding: 5px 12px; font-size: 11px; margin-bottom: 10px; }
     .hero-banner .badge-status.tutup { background: var(--warn); color: #fff; }
 
     /* ---------- Cari & kategori ---------- */
@@ -389,7 +389,7 @@
       font-family: inherit;
       cursor: pointer;
     }
-    .mini-cart-isi .kiri { text-align: left; }
+    .mini-cart-isi .kiri { text-align: left; display: flex; flex-direction: column; gap: 4px; }
     .mini-cart-isi .kiri .label { font-size: 11.5px; opacity: .8; display: flex; align-items: center; gap: 5px; }
     .mini-cart-isi .kiri .label svg { width: 13px; height: 13px; }
     .mini-cart-isi .kiri .total { font-size: 15px; font-weight: 700; color: #fff; }
@@ -455,7 +455,9 @@
     .btn-kosongkan svg { width: 14px; height: 14px; }
     .keranjang-judul-wrap { padding: 14px 16px 4px; }
     .keranjang-judul-baris { display: flex; align-items: center; gap: 8px; }
-    .keranjang-judul-baris h2 { font-size: 21px; margin: 0; }
+    .keranjang-judul-wrap h2 { font-size: 21px; margin: 0; }
+    .keranjang-baris-sub { display: flex; justify-content: space-between; align-items: center; margin-top: 3px; }
+    .keranjang-baris-sub .keranjang-subjudul { margin: 0; }
     .keranjang-subjudul { font-size: 12.5px; color: var(--muted); margin: 3px 0 0; }
 
     .daftar-keranjang-halaman { padding: 8px 16px 4px; display: flex; flex-direction: column; gap: 10px; }
@@ -887,28 +889,21 @@
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-          </button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </button>
         </div>
       </header>
 
-      <div class="konten-dgn-nav" style="flex:1; display:flex; flex-direction:column;">
-        <div class="keranjang-topbar">
-          <button type="button" class="btn-kembali-belanja" onclick="gantiHalaman('katalog')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            Kembali
-          </button>
-          <button type="button" class="btn-kosongkan" onclick="kosongkanKeranjang()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"               stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-             Kosongkan
-          </button>
-        </div>
-        <div class="keranjang-judul-wrap">
-          <div class="keranjang-judul-baris">
-            <h2>Keranjang Saya</h2>
-          </div>
+      <div class="keranjang-judul-wrap">
+        <h2>Keranjang Saya</h2>
+        <div class="keranjang-baris-sub">
           <p class="keranjang-subjudul" id="keranjang-subjudul">Belum ada barang dipilih.</p>
+          <button type="button" class="btn-kosongkan" onclick="kosongkanKeranjang()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Kosongkan
+          </button>
         </div>
+      </div>
 
         <div class="daftar-keranjang-halaman" id="daftar-keranjang"></div>
 
@@ -940,7 +935,6 @@
           <div class="info-aman">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/></svg>
             <span>Pesanan akan dikonfirmasi langsung oleh admin toko MIG Printing via WhatsApp</span>
-          </div>
         </div>
       </div>
     </section>
@@ -951,8 +945,8 @@
         <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing" style="width:24px;height:24px;">
         <span class="judul-halaman">Konfirmasi Pesanan</span>
         <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        </button>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </button>
       </header>
 
       <div style="flex:1; overflow-y:auto; padding-bottom:16px;">
@@ -1043,8 +1037,8 @@
           </button>
         </div>
       </header>
-      <div class="konten-dgn-nav">
-      <div class="keranjang-judul-wrap">
+      <div class="konten-dgn-nav" style="flex:1; display:flex; flex-direction:column;">
+        <div class="keranjang-judul-wrap">
         <h2>Pesanan Saya</h2>
         <p class="keranjang-subjudul">Riwayat pesanan yang sudah dikirim ke WhatsApp admin.</p>
       </div>
