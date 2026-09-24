@@ -829,6 +829,42 @@
     }
     .kotak-info-toko .judul-atas { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
     .kotak-info-toko h3 { font-size: 16px; margin: 0; }
+        /* Bar checkout ala Shopee: menempel di bawah layar */
+    .footer-checkout {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      z-index: 46;
+      margin-top: 0;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+      background: #fff;
+      border-top: 1px solid var(--line);
+    }
+    .baris-checkout { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+    .total-checkout { line-height: 1.25; }
+    .total-checkout .label { display: block; font-size: 11.5px; color: var(--muted); }
+    .total-checkout .nilai { font-size: 17px; font-weight: 700; color: var(--accent); }
+    .btn-checkout-wa {
+      width: auto;
+      min-width: 150px;
+      justify-content: center;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #fff;
+      padding: 13px 20px;
+      font-size: 14.5px;
+      font-weight: 700;
+    }
+    .btn-checkout-wa:disabled { background: #cfc8da; }
+    .info-keranjang-bawah { padding: 16px 16px calc(88px + env(safe-area-inset-bottom, 0px)); }
+    .info-keranjang-bawah .info-aman {
+      display: flex; align-items: flex-start; justify-content: center; gap: 6px;
+      font-size: 11px; color: var(--muted); text-align: center;
+    }
+    .info-keranjang-bawah .info-aman svg { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; }
   </style>
 </head>
 <body>
@@ -880,6 +916,9 @@
     <!-- ======================= HALAMAN: KERANJANG ======================= -->
     <section class="halaman" id="halaman-keranjang">
       <header class="app-header">
+      <button type="button" class="btn-back-header" onclick="gantiHalaman('katalog')" aria-label="Kembali">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
         <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
         <div class="header-teks">
           <div>
@@ -920,23 +959,23 @@
           </div>
         </div>
 
-        <div class="footer-checkout">
+                <div class="info-keranjang-bawah">
           <div id="area-pesan"></div>
-          <button type="button" class="btn-checkout-wa" id="btn-lanjut-checkout" onclick="lanjutKeKonfirmasi()" disabled>
-            <span class="kiri">
-              <svg class="ikon-wa" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg>
-              <span>
-                <span class="teks-utama" style="display:block;">Lanjut ke Checkout WhatsApp</span>
-                <span class="teks-sub" id="teks-total-item">Total: Rp 0 (0 barang)</span>
-              </span>
-            </span>
-            <svg class="panah" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
           <div class="info-aman">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/></svg>
             <span>Pesanan akan dikonfirmasi langsung oleh admin toko MIG Printing via WhatsApp</span>
+          </div>
         </div>
-      </div>
+
+        <div class="footer-checkout">
+          <div class="baris-checkout">
+            <div class="total-checkout">
+              <span class="label">Total</span>
+              <span class="nilai" id="teks-total-item">Rp 0</span>
+            </div>
+            <button type="button" class="btn-checkout-wa" id="btn-lanjut-checkout" onclick="lanjutKeKonfirmasi()" disabled>Checkout (0)</button>
+          </div>
+        </div>
     </section>
 
     <!-- ======================= HALAMAN: KONFIRMASI PESANAN ======================= -->
@@ -1759,8 +1798,10 @@
       document.getElementById('label-subtotal-produk').textContent =
         `Subtotal Produk`;
       document.getElementById('nilai-subtotal-produk').textContent = formatRupiah(total);
-      document.getElementById('teks-total-item').textContent = `Total: ${formatRupiah(total)} (${totalPcs} barang)`;
-      document.getElementById('btn-lanjut-checkout').disabled = (total === 0);
+      document.getElementById('teks-total-item').textContent = formatRupiah(total);
+      const tombolCheckout = document.getElementById('btn-lanjut-checkout');
+      tombolCheckout.textContent = `Checkout (${totalPcs})`;
+      tombolCheckout.disabled = (total === 0);
 
       // Badge di header keranjang, tab bawah, dan mini-bar
       const badgeNav = document.getElementById('badge-nav-keranjang');
@@ -1911,7 +1952,7 @@
       document.querySelectorAll('.nav-tab').forEach(el => {
         el.classList.toggle('aktif', el.dataset.nav === nama);
       });
-      document.getElementById('bottom-nav').style.display = (nama === 'konfirmasi') ? 'none' : '';
+      document.getElementById('bottom-nav').style.display = (nama === 'konfirmasi' || nama === 'keranjang') ? 'none' : '';
 
       if (nama === 'keranjang') {
         renderKeranjang();
