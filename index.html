@@ -442,7 +442,7 @@
     }
     .btn-kembali-belanja {
       display: flex; align-items: center; gap: 6px;
-      border: none; color: var(--ink);
+      border: none; color: var(--ink); background: none;
       font-family: inherit; font-size: 12px; font-weight: 700;
       padding: 8px 14px; border-radius: 20px; cursor: pointer;
     }
@@ -468,6 +468,11 @@
       grid-template-columns: 64px 1fr;
       gap: 12px;
     }
+    .kartu-pesanan { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+    .kartu-pesanan + .kartu-pesanan { margin-top: 10px; }
+    .kartu-pesanan .waktu-pesanan { font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+    .kartu-pesanan .baris-item-pesanan { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 4px; }
+    .kartu-pesanan .total-pesanan { display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
     .foto-keranjang {
       width: 64px; height: 64px;
       border: 1px solid var(--line);
@@ -820,7 +825,7 @@
       background: #fff; width: 100%; max-width: 480px; border-radius: 16px 16px 0 0;
       padding: 18px; max-height: 80vh; overflow-y: auto;
     }
-    .kotak-info-toko .judul-atas { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .kotak-info-toko .judul-atas { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
     .kotak-info-toko h3 { font-size: 16px; margin: 0; }
   </style>
 </head>
@@ -840,7 +845,7 @@
         </div>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
           </button>
         </div>
       </header>
@@ -864,7 +869,6 @@
           <div class="kategori-pills" id="kategori-pills"></div>
           <div class="bagian-judul">
             <h3>Pilihan Terbaik Sekolah</h3>
-            <span class="jumlah" id="jumlah-produk"></span>
           </div>
           <div class="grid-produk" id="grid-produk"></div>
         </div>
@@ -1026,12 +1030,33 @@
         </div>
       </div>
     </section>
+    <!-- ======================= HALAMAN: PESANAN ======================= -->
+    <section class="halaman" id="halaman-pesanan">
+      <header class="app-header">
+        <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
+        <div class="header-teks">
+          <h1>MIG Digital Printing</h1>
+        </div>
+        <div class="header-aksi">
+          <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          </button>
+        </div>
+      </header>
+      <div class="konten-dgn-nav">
+      <div class="keranjang-judul-wrap">
+        <h2>Pesanan Saya</h2>
+        <p class="keranjang-subjudul">Riwayat pesanan yang sudah dikirim ke WhatsApp admin.</p>
+      </div>
+      <div class="daftar-keranjang-halaman" id="daftar-pesanan"></div>
+    </div>
+    </section>
 
     <!-- ======================= MINI CART BAR + BOTTOM NAV ======================= -->
     <div class="mini-cart-bar" id="mini-cart-bar">
       <button type="button" class="mini-cart-isi" onclick="gantiHalaman('keranjang')">
         <span class="kiri">
-          <span class="label"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg><span id="mini-cart-jumlah">0 Item di Keranjang</span></span>
+          <span class="label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span id="mini-cart-jumlah">0 Item di Keranjang</span></span>
           <span class="total" id="mini-cart-total">Rp 0</span>
         </span>
         <span class="kanan">Lihat Keranjang <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
@@ -1051,7 +1076,7 @@
           </span>
           <span>Keranjang</span>
         </button>
-        <button type="button" class="nav-tab" data-nav="pesanan" onclick="bukaTabPesanan()">
+        <button type="button" class="nav-tab" data-nav="pesanan" onclick="gantiHalaman('pesanan')">
           <span class="wrap-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h1"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
           <span>Pesanan</span>
         </button>
@@ -1348,8 +1373,6 @@
       });
 
       const grid = document.getElementById('grid-produk');
-      document.getElementById('jumlah-produk').textContent =
-        hasil.length ? hasil.length + ' Produk Siap Pesan' : '';
       if (hasil.length === 0) {
         grid.innerHTML = '<div class="kosong">Tidak ada produk cocok.</div>';
         return;
@@ -1834,9 +1857,40 @@
 
     // Susun teks pesanan lalu buka WhatsApp — TIDAK memanggil backend apa pun,
     // jadi Stok di Google Sheet sama sekali tidak berubah dari sini.
+    const KUNCI_RIWAYAT = 'mig_riwayat_pesanan_v1';
+    function bacaRiwayat() {
+      try { return JSON.parse(localStorage.getItem(KUNCI_RIWAYAT)) || []; } catch (e) { return []; }
+    }
+    function simpanRiwayatPesanan() {
+      const daftar = Object.values(keranjang).map(item => ({
+        nama: item.produk['Nama Produk'],
+        varian: labelVarian(item.produk),
+        jumlah: item.jumlah,
+        harga: item.produk.Harga
+      }));
+      const riwayat = bacaRiwayat();
+      riwayat.unshift({ waktu: Date.now(), pemesan: namaPembeli, items: daftar, total: hitungTotal() });
+      try { localStorage.setItem(KUNCI_RIWAYAT, JSON.stringify(riwayat.slice(0, 30))); } catch (e) {}
+    }
+    function renderRiwayatPesanan() {
+      const wadah = document.getElementById('daftar-pesanan');
+      const riwayat = bacaRiwayat();
+        if (riwayat.length === 0) {
+        wadah.innerHTML = '<div class="kosong">Belum ada pesanan yang dikirim.</div>';
+        return;
+        }
+        wadah.innerHTML = riwayat.map(r => {
+      const tgl = new Date(r.waktu).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      const isiItem = r.items.map(it =>
+      `<div class="baris-item-pesanan"><span>${it.nama}${it.varian ? ' (' + it.varian + ')' : ''} x${it.jumlah}</span><span>${formatRupiah(it.harga * it.jumlah)}</span></div>`
+    ).join('');
+    return `<div class="kartu-pesanan"><div class="waktu-pesanan">${tgl}</div>${isiItem}<div class="total-pesanan"><span>Total</span><span>${formatRupiah(r.total)}</span></div></div>`;
+  }).join('');
+}
     function bukaWhatsapp() {
       if (Object.keys(keranjang).length === 0) return;
       if (!validasiNamaKonfirmasi()) return;
+      simpanRiwayatPesanan();
       const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(buatTeksPesanan());
       window.open(url, '_blank');
     }
@@ -1852,10 +1906,6 @@
       } else {
         tampilPesan('area-pesan-konfirmasi', 'error', 'Gagal menyalin. Coba salin manual dari pratinjau di atas.');
       }
-    }
-
-    function bukaTabPesanan() {
-      alert('Riwayat pesanan belum tersedia — setiap pesanan dikonfirmasi langsung lewat chat WhatsApp dengan admin toko.');
     }
 
     // ---- Navigasi antar halaman (ganti seluruh layar, ada tombol back) ----
@@ -1875,6 +1925,9 @@
       if (nama === 'konfirmasi') {
         document.getElementById('input-nama-konfirmasi').value = namaPembeli;
         renderPratinjauPesan();
+      }
+      if (nama === 'pesanan') {
+        renderRiwayatPesanan();
       }
       renderKeranjang(); // perbarui status mini-cart-bar (tampil hanya di katalog)
       window.scrollTo(0, 0);
