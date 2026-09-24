@@ -919,13 +919,7 @@
       <button type="button" class="btn-back-header" onclick="gantiHalaman('katalog')" aria-label="Kembali">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
-        <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
-        <div class="header-teks">
-          <div>
-            <h1>MIG Digital Printing</h1>
-          </div>
-          
-        </div>
+        <span class="judul-halaman">Keranjang Saya</span>
         <div class="header-aksi">
           <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
@@ -934,7 +928,6 @@
       </header>
 
       <div class="keranjang-judul-wrap">
-        <h2>Keranjang Saya</h2>
         <div class="keranjang-baris-sub">
           <p class="keranjang-subjudul" id="keranjang-subjudul">Belum ada barang dipilih.</p>
           <button type="button" class="btn-kosongkan" onclick="kosongkanKeranjang()">
@@ -948,23 +941,13 @@
 
 
         <div class="ringkasan-bayar">
-          <h4>Ringkasan Pembayaran</h4>
-          <div class="ringkasan-baris baris-subtotal">
-            <span id="label-subtotal-produk">Subtotal Produk</span>
-            <span id="nilai-subtotal-produk">Rp 0</span>
-          </div>
           <div class="ringkasan-baris">
             <span class="label-jam"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg>Estimasi Pengambilan</span>
             <span class="pill-jam">Jam 3 Sore</span>
           </div>
         </div>
 
-                <div class="info-keranjang-bawah">
-          <div id="area-pesan"></div>
-          <div class="info-aman">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/></svg>
-            <span>Pesanan akan dikonfirmasi langsung oleh admin toko MIG Printing via WhatsApp</span>
-          </div>
+          <div class="info-keranjang-bawah">
         </div>
 
         <div class="footer-checkout">
@@ -981,22 +964,14 @@
     <!-- ======================= HALAMAN: KONFIRMASI PESANAN ======================= -->
     <section class="halaman" id="halaman-konfirmasi">
       <header class="app-header">
-        <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing" style="width:24px;height:24px;">
-        <span class="judul-halaman">Konfirmasi Pesanan</span>
-        <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-      </button>
+        <button type="button" class="btn-ubah-pesanan" onclick="gantiHalaman('keranjang')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Ubah Pesanan
+        </button>
+        <span class="pill-admin-online" id="pill-admin-online" style="margin-left:auto;"><span class="dot"></span>Admin Online</span>
       </header>
 
       <div style="flex:1; overflow-y:auto; padding-bottom:16px;">
-        <div class="konfirmasi-topbar-mini">
-          <button type="button" class="btn-ubah-pesanan" onclick="gantiHalaman('keranjang')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            Ubah Pesanan
-          </button>
-          <span class="pill-admin-online" id="pill-admin-online"><span class="dot"></span>Admin Online</span>
-        </div>
-
         <div class="sukses-wrap">
           <div class="ikon-sukses">
             <svg class="utama" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
@@ -1795,9 +1770,6 @@
       document.getElementById('keranjang-subjudul').textContent = jenisProduk
         ? totalPcs + ' item terpilih siap diproses'
         : 'Belum ada barang dipilih.';
-      document.getElementById('label-subtotal-produk').textContent =
-        `Subtotal Produk`;
-      document.getElementById('nilai-subtotal-produk').textContent = formatRupiah(total);
       document.getElementById('teks-total-item').textContent = formatRupiah(total);
       const tombolCheckout = document.getElementById('btn-lanjut-checkout');
       tombolCheckout.textContent = `Checkout (${totalPcs})`;
