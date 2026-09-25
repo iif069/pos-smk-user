@@ -54,7 +54,7 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      background: var(--paper);
+      background: linear-gradient(rgba(0,0,0,.10), rgba(0,0,0,.10)), #fff;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -167,19 +167,20 @@
       background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
       color: #fff;
     }
+    .hero-label { font-size: 12.5px; font-weight: 400; opacity: .85; margin: 0 0 6px; }
     .hero-pill {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      font-weight: 400;
       background: rgba(255,255,255,.18);
-      padding: 5px 12px;
+      padding: 6px 12px;
       border-radius: 20px;
-      margin-bottom: 10px;
     }
+    .hero-pill svg { width: 15px; height: 15px; flex-shrink: 0; }
     .hero-banner h2 { font-size: 21px; line-height: 1.3; margin: 0 0 8px; }
     .hero-banner p { font-size: 13px; line-height: 1.5; margin: 0 0 12px; opacity: .92; }
-    .hero-jadwal { display: flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; }
-    .hero-jadwal svg { width: 15px; height: 15px; flex-shrink: 0; }
     .hero-banner .badge-status { display: inline-block; background: #25D366; color: #fff; padding: 5px 12px; font-size: 11px; margin-bottom: 10px; }
     .hero-banner .badge-status.tutup { background: var(--warn); color: #fff; }
 
@@ -325,7 +326,7 @@
       display: flex; align-items: center; justify-content: center; gap: 5px;
     }
     .btn-tambah-mini:active { transform: scale(.96); }
-    .btn-tambah-mini.perlu-pilih { background: #fff; color: var(--accent); border: 1px solid var(--accent); }
+    .btn-tambah-mini.perlu-pilih { background: var(--accent); color: #fff; border: none; }
     .btn-tambah-mini svg { width: 13px; height: 13px; }
     /* Foto kartu pakai <img> (bukan background) supaya bisa lazy-load: foto yang
        belum kelihatan di layar tidak ikut diunduh dulu. */
@@ -592,33 +593,6 @@
       font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer; padding: 0;
     }
     .btn-ubah-pesanan svg { width: 14px; height: 14px; }
-    .pill-admin-online { display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #1a8a3d; flex-shrink: 0; }
-    .pill-admin-online .dot { width: 7px; height: 7px; border-radius: 50%; background: #1a8a3d; }
-    .pill-admin-online.offline { color: var(--muted); }
-    .pill-admin-online.offline .dot { background: var(--muted); }
-
-    .sukses-wrap { text-align: center; padding: 20px 24px 6px; }
-    .ikon-sukses {
-      width: 74px; height: 74px; margin: 0 auto 14px;
-      border-radius: 50%;
-      background: var(--dcf7e3, #dcf7e3);
-      background: #dcf7e3;
-      color: #1a8a3d;
-      display: flex; align-items: center; justify-content: center;
-      position: relative;
-    }
-    .ikon-sukses svg.utama { width: 34px; height: 34px; }
-    .ikon-sukses .centang-kecil {
-      position: absolute; bottom: -2px; right: -2px;
-      width: 26px; height: 26px; border-radius: 50%;
-      background: #1a8a3d; color: #fff;
-      display: flex; align-items: center; justify-content: center;
-      border: 3px solid #fff;
-    }
-    .ikon-sukses .centang-kecil svg { width: 13px; height: 13px; }
-    .sukses-wrap h2 { font-size: 19px; margin: 0 0 6px; }
-    .sukses-wrap p { font-size: 12.5px; color: var(--muted); line-height: 1.5; margin: 0; }
-
     .kartu-data-pemesan { margin: 16px 16px 0; padding: 14px; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
     .kartu-data-pemesan .judul { display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; margin-bottom: 12px; }
     .kartu-data-pemesan .judul svg { width: 15px; height: 15px; color: var(--ink); }
@@ -637,29 +611,6 @@
       background: #fbfaf7;
     }
     .field-input-ikon input.error { border-color: var(--warn); }
-
-    .preview-judul-baris { display: flex; justify-content: space-between; align-items: center; margin: 18px 16px 8px; }
-    .preview-judul-baris .kiri { display: flex; align-items: center; gap: 6px; font-size: 13.5px; font-weight: 700; }
-    .preview-judul-baris .kiri svg { width: 15px; height: 15px; color: var(--ink); }
-
-    .bungkus-preview-wa { margin: 0 16px; border-radius: 14px; overflow: hidden; background: #dcf7e3; padding: 12px; }
-    .kepala-preview-wa { display: flex; align-items: center; gap: 9px; margin-bottom: 10px; padding: 0 2px; }
-    .avatar-wa { width: 34px; height: 34px; border-radius: 50%; background: var(--hijau-dark); color: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .avatar-wa svg { width: 17px; height: 17px; }
-    .kepala-preview-wa .nama-admin { font-size: 13px; font-weight: 700; }
-    .kepala-preview-wa .peran-admin { font-size: 11px; color: #2f6b3f; }
-    .gelembung-preview {
-      background: #fff;
-      border-radius: 10px;
-      padding: 12px 12px 8px;
-      font-size: 13px;
-      line-height: 1.6;
-    }
-    .gelembung-preview .rincian-judul { color: var(--accent); font-weight: 700; margin: 8px 0 2px; }
-    .gelembung-preview .baris-rincian { display: flex; justify-content: space-between; gap: 8px; font-size: 12.5px; margin-bottom: 2px; }
-    .gelembung-preview .baris-rincian .item-nama { flex: 1; }
-    .gelembung-preview .catatan-nama { margin-top: 8px; font-size: 12.5px; }
-    .gelembung-preview .waktu-preview { text-align: right; font-size: 10.5px; color: var(--muted); margin-top: 6px; }
 
     .info-bayar-kasir {
       display: flex; gap: 9px; align-items: flex-start;
@@ -681,13 +632,6 @@
       padding: 14px; display: flex; align-items: center; justify-content: center; gap: 9px; cursor: pointer;
     }
     .btn-buka-wa svg { width: 19px; height: 19px; }
-    .btn-salin {
-      border: 1px solid var(--line); border-radius: 12px; background:#00000015; color: var(--ink);
-      font-family: inherit; font-size: 13.5px; font-weight: 700;
-      padding: 13px; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
-    }
-    .btn-salin svg { width: 16px; height: 16px; }
-
     .footer-trust { padding: 24px 16px 24px; display: flex; flex-direction: column; gap: 14px; border-top: 1px solid var(--line); margin-top: 8px; }
     .footer-trust .baris-trust { display: flex; gap: 10px; align-items: flex-start; }
     .footer-trust .ikon-trust { width: 30px; height: 30px; border-radius: 8px; background: #00000015 ; color: var(--ink); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -883,6 +827,27 @@
       font-size: 11px; color: var(--muted); text-align: center;
     }
     .info-keranjang-bawah .info-aman svg { width: 13px; height: 13px; flex-shrink: 0; margin-top: 1px; }
+    /* ---------- Tambahan: segmented control kelas + ringkasan pesanan ---------- */
+    .seg-kelas { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 8px; margin-top: 4px; }
+    .seg-kelas button {
+      height: 40px; border-radius: 9px; font-family: inherit; font-size: 13.5px; font-weight: 600;
+      background: #fbfaf7; border: 1px solid var(--line); color: var(--ink); cursor: pointer;
+    }
+    .seg-kelas button.aktif { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .hint-kelas { display: none; color: var(--warn); font-size: 11.5px; margin-top: 6px; }
+    .hint-kelas.tampil { display: block; }
+    .ringkasan-mini {
+      margin: 14px 16px 0; padding: 12px 13px; background: #fff; border: 1px solid var(--line);
+      border-radius: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+    }
+    .ringkasan-mini .kiri .label { font-size: 11.5px; color: var(--muted); }
+    .ringkasan-mini .kiri .nilai { font-size: 14.5px; font-weight: 700; }
+    .ringkasan-mini .kanan { font-size: 13px; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 3px; }
+    .ringkasan-mini .kanan svg { width: 14px; height: 14px; transition: transform .15s ease; }
+    .ringkasan-mini.terbuka .kanan svg { transform: rotate(180deg); }
+    .rincian-ringkasan { display: none; margin: 0 16px; padding: 0 13px; background: #fff; border: 1px solid var(--line); border-top: none; border-radius: 0 0 10px 10px; }
+    .rincian-ringkasan.tampil { display: block; padding: 10px 13px 12px; }
+    .rincian-ringkasan .baris { display: flex; justify-content: space-between; font-size: 12.5px; padding: 4px 0; color: var(--ink); }
   </style>
 </head>
 <body>
@@ -900,18 +865,18 @@
           
         </div>
         <div class="header-aksi">
-          <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <button type="button" class="btn-icon" onclick="gantiHalaman('keranjang')" aria-label="Keranjang">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="badge-keranjang-mini" id="badge-keranjang-header" style="display:none">0</span>
           </button>
         </div>
       </header>
 
       <div class="konten-dgn-nav" id="konten-katalog">
         <div class="hero-banner">
-          <span class="hero-pill badge-status" id="badge-status">BUKA</span>
+          <p class="hero-label">Order kapan saja</p>
           <h2>Katalog Seragam &amp; Atribut Sekolah</h2>
-          <p>Pesan seragam &amp; atribut sekolah mudah cepat via WhatsApp.</p>
-          <div class="hero-jadwal">
+          <div class="hero-pill">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg>
             <span>Pesanan bisa diambil jam 3 sore</span>
           </div>
@@ -920,11 +885,11 @@
         <div class="panel-produk">
           <div class="search-bar">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-            <input type="text" id="cari" placeholder="Cari seragam, spanduk, topi, dasi...">
+            <input type="text" id="cari" placeholder="Cari seragam, sabuk, topi, dasi...">
           </div>
           <div class="kategori-pills" id="kategori-pills"></div>
           <div class="bagian-judul">
-            <h3>Pilihan Terbaik Sekolah</h3>
+            <h3>Semua Produk</h3>
           </div>
           <div class="grid-produk" id="grid-produk"></div>
         </div>
@@ -939,9 +904,10 @@
       <span class="judul-halaman">Keranjang Saya</span>
     </button>
         <div class="header-aksi">
-          <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-        </button>
+          <button type="button" class="btn-icon" onclick="gantiHalaman('keranjang')" aria-label="Keranjang">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="badge-keranjang-mini" id="badge-keranjang-header-2" style="display:none">0</span>
+          </button>
         </div>
       </header>
 
@@ -984,19 +950,15 @@
       <header class="app-header">
         <button type="button" class="btn-back-header" onclick="gantiHalaman('keranjang')" aria-label="Kembali ke keranjang">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
-          <span class="judul-halaman">Ubah Pesanan</span>
+          <span class="judul-halaman">Konfirmasi Pesanan</span>
         </button>
-        <span class="pill-admin-online" id="pill-admin-online"><span class="dot"></span>Admin Online</span>
       </header>
 
-      <div style="flex:1; overflow-y:auto; padding-bottom:16px;">
-        <div class="sukses-wrap">
-          <div class="ikon-sukses">
-            <svg class="utama" viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
-            <span class="centang-kecil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-          </div>
-          <h2>Siap Diteruskan ke WhatsApp!</h2>
-          <p>Format rincian pesanan sudah tersusun rapi. Begitu tombol ditekan, Anda cukup klik <b>Kirim</b> di aplikasi WhatsApp.</p>
+      <div style="flex:1; overflow-y:auto; padding-bottom:calc(76px + env(safe-area-inset-bottom, 0px));">
+
+        <div class="info-bayar-kasir" style="margin-top:14px;">
+          <span class="ikon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9 1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V9h2z"/></svg></span>
+          <span><span class="label-kecil">Siapkan uang pas</span>Ambil mulai jam 3 sore di toko MIG Digital Printing, dan siapkan <b>uang pas</b> ya supaya prosesnya lebih cepat.</span>
         </div>
 
         <div class="kartu-data-pemesan">
@@ -1005,46 +967,33 @@
             <label for="input-nama-konfirmasi">Nama Lengkap</label>
             <div class="field-input-ikon">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg>
-              <input type="text" id="input-nama-konfirmasi" placeholder="mis. Ibu Rahmawati (Wali Murid ...)" autocomplete="name">
+              <input type="text" id="input-nama-konfirmasi" placeholder="mis. Rani Aulia" autocomplete="name">
             </div>
-            <div class="hint-nama" id="hint-nama">Isi nama dulu ya, biar pesanannya jelas.</div>
+            <div class="hint-nama" id="hint-nama">Isi nama dulu ya, biar pesananmu jelas.</div>
+          </div>
+          <div class="field-pemesan">
+            <label>Kelas</label>
+            <div class="seg-kelas" id="seg-kelas">
+              <button type="button" onclick="pilihKelas('X')">X</button>
+              <button type="button" onclick="pilihKelas('XI')">XI</button>
+              <button type="button" onclick="pilihKelas('XII')">XII</button>
+            </div>
+            <div class="hint-kelas" id="hint-kelas">Pilih kelas dulu ya.</div>
           </div>
         </div>
 
-        <div class="preview-judul-baris">
-          <span class="kiri"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>Pratinjau Pesan Otomatis</span>
-          
-        </div>
-        <div class="bungkus-preview-wa">
-          <div class="kepala-preview-wa">
-            <span class="avatar-wa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
-            <div><div class="nama-admin">Admin MIG Digital Printing</div><div class="peran-admin">CS Counter</div></div>
+        <div class="ringkasan-mini" id="ringkasan-mini" onclick="toggleRincianRingkasan()">
+          <div class="kiri">
+            <div class="label" id="ringkasan-mini-label">0 item</div>
+            <div class="nilai" id="ringkasan-mini-total">Rp 0</div>
           </div>
-          <div class="gelembung-preview" id="gelembung-preview"></div>
+          <div class="kanan">Lihat rincian <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></div>
         </div>
+        <div class="rincian-ringkasan" id="rincian-ringkasan"></div>
 
-        <div class="info-bayar-kasir">
-          <span class="ikon"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9 1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V9h2z"/></svg></span>
-          <span><span class="label-kecil">Informasi pembayaran kasir</span>Mohon siapkan <b>uang pas</b> saat pengambilan barang, supaya proses transaksi lebih cepat.</span>
-        </div>
-
-        <div class="aksi-konfirmasi">
-          <div id="area-pesan-konfirmasi"></div>
-          <button type="button" class="btn-buka-wa" id="btn-buka-wa" onclick="bukaWhatsapp()">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg>
-            Buka WhatsApp Sekarang
-          </button>
-          <button type="button" class="btn-salin" onclick="salinFormatPesanan()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            Salin Format Pesanan
-          </button>
-        </div>
+        <div id="area-pesan-konfirmasi"></div>
 
         <div class="footer-trust">
-          <div class="baris-trust">
-            <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 4 5v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V5l-8-3z"/></svg></span>
-            <div><div class="judul-trust">Layanan Resmi &amp; Terverifikasi</div><div class="ket-trust">Admin langsung memproses invoice resmi</div></div>
-          </div>
           <div class="baris-trust">
             <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg></span>
             <div><div class="judul-trust">Jam Operasional Admin Counter</div><div class="ket-trust" id="ket-jam-operasional">Buka setiap hari (08.00 - 16.30 WIB)</div></div>
@@ -1055,6 +1004,13 @@
           </div>
         </div>
       </div>
+
+      <div class="footer-checkout">
+        <button type="button" class="btn-buka-wa" id="btn-buka-wa" onclick="bukaWhatsapp()" style="width:100%;">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg>
+          Lanjut ke WhatsApp
+        </button>
+      </div>
     </section>
     <!-- ======================= HALAMAN: PESANAN ======================= -->
     <section class="halaman" id="halaman-pesanan">
@@ -1064,15 +1020,16 @@
           <h1>MIG Digital Printing</h1>
         </div>
         <div class="header-aksi">
-          <button type="button" class="btn-icon ungu" onclick="bukaInfoToko()" aria-label="Info toko">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          <button type="button" class="btn-icon" onclick="gantiHalaman('keranjang')" aria-label="Keranjang">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="badge-keranjang-mini" id="badge-keranjang-header-3" style="display:none">0</span>
           </button>
         </div>
       </header>
       <div class="konten-dgn-nav" style="flex:1; display:flex; flex-direction:column;">
         <div class="keranjang-judul-wrap">
         <h2>Pesanan Saya</h2>
-        <p class="keranjang-subjudul">Riwayat pesanan yang sudah dikirim ke WhatsApp admin.</p>
+        <p class="keranjang-subjudul">Pantau status pesananmu di sini.</p>
       </div>
       <div class="daftar-keranjang-halaman" id="daftar-pesanan"></div>
     </div>
@@ -1095,16 +1052,13 @@
           <span class="wrap-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>
           <span>Katalog</span>
         </button>
-        <button type="button" class="nav-tab" data-nav="keranjang" onclick="gantiHalaman('keranjang')">
-          <span class="wrap-ikon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
-            <span class="badge-nav" id="badge-nav-keranjang" style="display:none">0</span>
-          </span>
-          <span>Keranjang</span>
-        </button>
         <button type="button" class="nav-tab" data-nav="pesanan" onclick="gantiHalaman('pesanan')">
           <span class="wrap-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6M9 16h6M9 8h1"/><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>
           <span>Pesanan</span>
+        </button>
+        <button type="button" class="nav-tab" data-nav="info" onclick="bukaInfoToko()">
+          <span class="wrap-ikon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span>
+          <span>Info</span>
         </button>
       </div>
     </nav>
@@ -1194,6 +1148,7 @@
     let kategoriAktif = ''; // '' berarti "Semua"
     let catatanPesanan = '';
     let namaPembeli = '';
+    let kelasPembeli = '';
     let nomorWaPembeli = '';
     let halamanAktif = 'katalog';
 
@@ -1388,15 +1343,24 @@
       renderProduk();
     }
 
+    // Produk yang stoknya habis digeser ke bawah, sisanya tetap urutan asli
+    // dari Sheet — supaya barang yang masih bisa dibeli lebih dulu terlihat.
+    function urutkanHabisKeBawah(list) {
+      const ada = [], habis = [];
+      list.forEach(g => (habisTotal(g) ? habis : ada).push(g));
+      return ada.concat(habis);
+    }
+
     function renderProduk() {
       const kataCari = document.getElementById('cari').value.toLowerCase();
       const kategori = kategoriAktif;
 
-      const hasil = grupProduk.filter(g => {
+      let hasil = grupProduk.filter(g => {
         if (kataCari && !g.nama.toLowerCase().includes(kataCari)) return false;
         if (kategori && g.kategori !== kategori) return false;
         return true;
       });
+      hasil = urutkanHabisKeBawah(hasil);
 
       const grid = document.getElementById('grid-produk');
       if (hasil.length === 0) {
@@ -1435,7 +1399,7 @@
         ? ''
         : perluPilih
           ? `<button type="button" class="btn-tambah-mini perlu-pilih" onclick="event.stopPropagation(); bukaModalProduk('${grup.key}')">
-               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>`
+               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Pilih Ukuran</button>`
           : `<button type="button" class="btn-tambah-mini" onclick="tambahLangsungDariKartu(event, '${grup.key}')">
                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Tambah</button>`;
 
@@ -1592,13 +1556,13 @@
         <div class="header-produk">
           <div>
             <div class="nama">${grup.nama}</div>
-            ${hargaFlat ? '<div class="catatan-flat">Semua ukuran harga sama (flat price)</div>' : ''}
+            ${hargaFlat ? '<div class="catatan-flat">Harga sama untuk semua ukuran</div>' : ''}
           </div>
           <div class="kategori">${grup.kategori}</div>
         </div>
         ${info.isi ? `<div class="ket-produk">${info.isi}</div>` : ''}
         ${dimsPerlu.length ? `<div class="baris-dropdown">${htmlChip}</div>` : ''}
-        ${ringkasanPilihan ? `<div class="pilihan-anda"><span class="label-kecil">Pilihan Anda</span><span class="isi">${ringkasanPilihan}</span></div>` : ''}`;
+        ${ringkasanPilihan ? `<div class="pilihan-anda"><span class="label-kecil">Pilihanmu</span><span class="isi">${ringkasanPilihan}</span></div>` : ''}`;
 
       const footer = `
         ${htmlInfo}
@@ -1674,7 +1638,8 @@
 
     // Foto produk melayang dari modal/kartu ke ikon keranjang di header.
   function efekTerbangKeKeranjang(elAsal, urlFoto) {
-  const target = document.querySelector('.nav-tab[data-nav="keranjang"] .wrap-ikon');
+  const target = document.querySelector('#halaman-katalog .btn-icon') ||
+                 document.querySelector('.app-header .btn-icon');
   if (!target || !elAsal) return;
 
   function denyut() {
@@ -1793,12 +1758,13 @@
       tombolCheckout.textContent = `Checkout (${totalPcs})`;
       tombolCheckout.disabled = (total === 0);
 
-      // Badge di header keranjang, tab bawah, dan mini-bar
-      const badgeNav = document.getElementById('badge-nav-keranjang');
-      if (badgeNav) {
-        badgeNav.textContent = totalPcs;
-        badgeNav.style.display = totalPcs > 0 ? 'flex' : 'none';
-      }
+      // Badge di ikon keranjang header (muncul di semua halaman) dan mini-bar
+      ['badge-keranjang-header', 'badge-keranjang-header-2', 'badge-keranjang-header-3'].forEach(function (idBadge) {
+        const badge = document.getElementById(idBadge);
+        if (!badge) return;
+        badge.textContent = totalPcs;
+        badge.style.display = totalPcs > 0 ? 'flex' : 'none';
+      });
       const miniBar = document.getElementById('mini-cart-bar');
       if (miniBar) {
       const tampilMini = totalPcs > 0 && halamanAktif === 'katalog';
@@ -1837,24 +1803,36 @@
       });
       teks += `\nTotal Estimasi: ${formatRupiah(hitungTotal())}`;
       teks += `\nNama: ${namaPembeli || '-'}`;
+      teks += `\nKelas: ${kelasPembeli || '-'}`;
       if (catatanPesanan) teks += `\nCatatan: ${catatanPesanan}`;
       return teks;
     }
 
-    function renderPratinjauPesan() {
+    function renderRincianRingkasan() {
       const daftar = Object.entries(keranjang);
-      const wadah = document.getElementById('gelembung-preview');
-      let html = '<div>Halo Admin MIG Digital Printing, saya ingin memesan:</div>';
-      html += '<div class="rincian-judul">Rincian Pesanan:</div>';
-      daftar.forEach(([id, item], i) => {
+      const totalPcs = hitungJumlahItem();
+      document.getElementById('ringkasan-mini-label').textContent = totalPcs + ' item';
+      document.getElementById('ringkasan-mini-total').textContent = formatRupiah(hitungTotal());
+      const wadah = document.getElementById('rincian-ringkasan');
+      wadah.innerHTML = daftar.map(([id, item]) => {
         const varian = labelVarian(item.produk);
-        html += `<div class="baris-rincian"><span class="item-nama">${i + 1}. ${item.produk['Nama Produk']}${varian ? ' (' + varian + ')' : ''} x${item.jumlah}</span><span>${formatRupiah(item.produk.Harga * item.jumlah)}</span></div>`;
+        return `<div class="baris"><span>${item.produk['Nama Produk']}${varian ? ' (' + varian + ')' : ''} x${item.jumlah}</span><span>${formatRupiah(item.produk.Harga * item.jumlah)}</span></div>`;
+      }).join('');
+    }
+
+    function toggleRincianRingkasan() {
+      const mini = document.getElementById('ringkasan-mini');
+      const rincian = document.getElementById('rincian-ringkasan');
+      const tampil = rincian.classList.toggle('tampil');
+      mini.classList.toggle('terbuka', tampil);
+    }
+
+    function pilihKelas(k) {
+      kelasPembeli = k;
+      document.querySelectorAll('#seg-kelas button').forEach(function (btn) {
+        btn.classList.toggle('aktif', btn.textContent.trim() === k);
       });
-      html += `<div class="baris-rincian" style="margin-top:6px;font-weight:700;"><span>Total Estimasi:</span><span>${formatRupiah(hitungTotal())}</span></div>`;
-      html += `<div class="catatan-nama"><b>Nama:</b> ${namaPembeli || '-'}</div>`;
-      if (catatanPesanan) html += `<div class="catatan-nama"><b>Catatan:</b> ${catatanPesanan}</div>`;
-      html += `<div class="waktu-preview">${new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} ✓✓</div>`;
-      wadah.innerHTML = html;
+      document.getElementById('hint-kelas').classList.remove('tampil');
     }
 
     function lanjutKeKonfirmasi() {
@@ -1880,6 +1858,17 @@
       return true;
     }
 
+    function validasiKelasKonfirmasi() {
+      const hint = document.getElementById('hint-kelas');
+      if (!kelasPembeli) {
+        hint.classList.add('tampil');
+        document.getElementById('seg-kelas').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      hint.classList.remove('tampil');
+      return true;
+    }
+
     // Susun teks pesanan lalu buka WhatsApp — TIDAK memanggil backend apa pun,
     // jadi Stok di Google Sheet sama sekali tidak berubah dari sini.
     const KUNCI_RIWAYAT = 'mig_riwayat_pesanan_v1';
@@ -1894,7 +1883,7 @@
         harga: item.produk.Harga
       }));
       const riwayat = bacaRiwayat();
-      riwayat.unshift({ waktu: Date.now(), pemesan: namaPembeli, items: daftar, total: hitungTotal() });
+      riwayat.unshift({ waktu: Date.now(), pemesan: namaPembeli, kelas: kelasPembeli, items: daftar, total: hitungTotal() });
       try { localStorage.setItem(KUNCI_RIWAYAT, JSON.stringify(riwayat.slice(0, 30))); } catch (e) {}
     }
     function renderRiwayatPesanan() {
@@ -1915,22 +1904,10 @@
     function bukaWhatsapp() {
       if (Object.keys(keranjang).length === 0) return;
       if (!validasiNamaKonfirmasi()) return;
+      if (!validasiKelasKonfirmasi()) return;
       simpanRiwayatPesanan();
       const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(buatTeksPesanan());
       window.open(url, '_blank');
-    }
-
-    function salinFormatPesanan() {
-      namaPembeli = document.getElementById('input-nama-konfirmasi').value.trim();
-      const teks = buatTeksPesanan();
-      const tampilkanSukses = () => tampilPesan('area-pesan-konfirmasi', 'sukses', 'Format pesanan disalin.');
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(teks).then(tampilkanSukses).catch(() => {
-          tampilPesan('area-pesan-konfirmasi', 'error', 'Gagal menyalin. Coba salin manual dari pratinjau di atas.');
-        });
-      } else {
-        tampilPesan('area-pesan-konfirmasi', 'error', 'Gagal menyalin. Coba salin manual dari pratinjau di atas.');
-      }
     }
 
     // ---- Navigasi antar halaman (ganti seluruh layar, ada tombol back) ----
@@ -1949,7 +1926,7 @@
       }
       if (nama === 'konfirmasi') {
         document.getElementById('input-nama-konfirmasi').value = namaPembeli;
-        renderPratinjauPesan();
+        renderRincianRingkasan();
       }
       if (nama === 'pesanan') {
         renderRiwayatPesanan();
@@ -1967,27 +1944,7 @@
       document.getElementById('overlay-info-toko').classList.remove('tampil');
     }
 
-    // Status BUKA/TUTUP dihitung dari jam operasional Senin–Sabtu 08.00–17.00
-    // memakai jam di HP pembeli (perkiraan WIB, bukan jam server).
-    function perbaruiStatusBuka() {
-      const now = new Date();
-      const hari = now.getDay(); // 0 = Minggu
-      const jam = now.getHours();
-      const buka = hari !== 0 && jam >= 8 && jam < 16.30;
-      document.querySelectorAll('#badge-status, #badge-status-2').forEach(el => {
-        el.textContent = buka ? 'BUKA' : 'TUTUP';
-        el.classList.toggle('tutup', !buka);
-      });
-      const pillAdmin = document.getElementById('pill-admin-online');
-      if (pillAdmin) {
-        pillAdmin.classList.toggle('offline', !buka);
-        pillAdmin.innerHTML = '<span class="dot"></span>' + (buka ? 'Admin Online' : 'Admin Offline');
-      }
-    }
-
     document.getElementById('info-nomor-wa').textContent = '+' + NOMOR_WA;
-    perbaruiStatusBuka();
-    setInterval(perbaruiStatusBuka, 5 * 60 * 1000);
 
     document.getElementById('cari').addEventListener('input', renderProduk);
     
@@ -1995,7 +1952,6 @@
       namaPembeli = this.value;
       this.classList.remove('error');
       document.getElementById('hint-nama').classList.remove('tampil');
-      renderPratinjauPesan();
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && modalTerbuka) tutupModal();
