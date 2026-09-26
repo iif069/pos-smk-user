@@ -1637,45 +1637,55 @@
     }
 
     // Foto produk melayang dari modal/kartu ke ikon keranjang di header.
-  function efekTerbangKeKeranjang(elAsal, urlFoto) {
-  const target = document.querySelector('#halaman-katalog .btn-icon') ||
-                 document.querySelector('.app-header .btn-icon');
-  if (!target || !elAsal) return;
+    // Gaya Shopee: titik AWAL animasi sengaja didekatkan ke ikon keranjang
+    // (bukan posisi produk yang sebenarnya di halaman) — jadi efeknya selalu
+    // "muncul dekat keranjang lalu masuk", bukan "terbang jauh dari kartu".
+    // Parameter elAsal tetap diterima (dipakai sbg fallback lokasi denyut),
+    // tapi TIDAK lagi dipakai untuk titik mulai terbang.
+    function efekTerbangKeKeranjang(elAsal, urlFoto) {
+      const target = document.querySelector('#halaman-katalog .btn-icon') ||
+                     document.querySelector('.app-header .btn-icon');
+      if (!target) return;
 
-  function denyut() {
-    target.classList.add('pop');
-    setTimeout(() => target.classList.remove('pop'), 350);
-  }
+      function denyut() {
+        target.classList.add('pop');
+        setTimeout(() => target.classList.remove('pop'), 350);
+      }
 
-  if (!urlFoto || typeof Element.prototype.animate !== 'function' ||
-      (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    denyut();
-    return;
-  }
+      if (!urlFoto || typeof Element.prototype.animate !== 'function' ||
+          (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+        denyut();
+        return;
+      }
 
-  const asal = elAsal.getBoundingClientRect();
-  const tujuan = target.getBoundingClientRect();
-  const x0 = asal.left + asal.width / 2;
-  const y0 = asal.top + asal.height / 2;
-  const x1 = tujuan.left + tujuan.width / 2;
-  const y1 = tujuan.top + tujuan.height / 2;
+      const tujuan = target.getBoundingClientRect();
+      const x1 = tujuan.left + tujuan.width / 2;
+      const y1 = tujuan.top + tujuan.height / 2;
 
-  const sisi = Math.max(56, Math.min(asal.width, asal.height, 140));
-  const foto = document.createElement('div');
-  foto.className = 'foto-terbang';
-  foto.style.width = sisi + 'px';
-  foto.style.height = sisi + 'px';
-  foto.style.left = (x0 - sisi / 2) + 'px';
-  foto.style.top = (y0 - sisi / 2) + 'px';
-  foto.style.backgroundImage = "url('" + urlFoto + "')";
-  document.body.appendChild(foto);
+      // Titik mulai: sedikit di bawah ikon keranjang, BUKAN posisi kartu/modal
+      // produk. Jaraknya sengaja pendek (~70px) supaya terasa seperti barang
+      // "muncul" tepat di dekat keranjang lalu diserap masuk — persis pola
+      // Shopee, bukan efek terbang jarak jauh dari tempat produknya.
+      const sisi = 60;
+      const x0 = x1;
+      const y0 = y1 + 72;
 
-  const anim = foto.animate([
-    { transform: 'translate(0,0) scale(1)', opacity: 1 },
-    { transform: 'translate(' + (x1 - x0) + 'px, ' + (y1 - y0) + 'px) scale(.2)', opacity: 0.3 }
-  ], { duration: 550, easing: 'cubic-bezier(.3,0,.7,1)', fill: 'forwards' });
-  anim.onfinish = () => { foto.remove(); denyut(); };
-  }
+      const foto = document.createElement('div');
+      foto.className = 'foto-terbang';
+      foto.style.width = sisi + 'px';
+      foto.style.height = sisi + 'px';
+      foto.style.left = (x0 - sisi / 2) + 'px';
+      foto.style.top = (y0 - sisi / 2) + 'px';
+      foto.style.backgroundImage = "url('" + urlFoto + "')";
+      document.body.appendChild(foto);
+
+      const anim = foto.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1, offset: 0 },
+        { transform: 'translate(0,-14px) scale(1.05)', opacity: 1, offset: 0.3 },
+        { transform: 'translate(' + (x1 - x0) + 'px, ' + (y1 - y0) + 'px) scale(.15)', opacity: 0, offset: 1 }
+      ], { duration: 420, easing: 'cubic-bezier(.3,0,.6,1)', fill: 'forwards' });
+      anim.onfinish = () => { foto.remove(); denyut(); };
+    }
 
     function labelVarian(p) {
       return [p.Jurusan, p['Tipe Lengan'], p.Ukuran].filter(Boolean).join(' · ');
