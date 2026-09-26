@@ -880,9 +880,6 @@
             <input type="text" id="cari" placeholder="Cari seragam, sabuk, topi, dasi...">
           </div>
           <div class="kategori-pills" id="kategori-pills"></div>
-          <div class="bagian-judul">
-            <h3>Semua Produk</h3>
-          </div>
           <div class="grid-produk" id="grid-produk"></div>
         </div>
       </div>
@@ -1061,7 +1058,7 @@
         </div>
         <div class="baris-trust">
           <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7 2 3 6 3 10.5 3 16 12 22 12 22s9-6 9-11.5C21 6 17 2 12 2zm0 12a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z"/></svg></span>
-          <div><div class="judul-trust">Alamat</div><div class="ket-trust"><a href="https://maps.app.goo.gl/eqwx6mceE1yR65ax9">Jln raya Rajadesa - Rancah, sebrang MIG Swalayan</a></div></div>
+          <div><div class="judul-trust">Alamat</div><div class="ket-trust"><a href="https://maps.app.goo.gl/eqwx6mceE1yR65ax9" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline; text-underline-offset:2px;">Jln raya Rajadesa - Rancah, sebrang MIG Swalayan</a></div></div>
         </div>
         <div class="baris-trust">
           <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15l-.94 1.164c-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.446-.52.149-.174.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074C7.9 15.5 9.85 18.5 12.83 19.79c.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg></span>
@@ -1652,11 +1649,24 @@
       foto.style.backgroundImage = "url('" + urlFoto + "')";
       document.body.appendChild(foto);
 
-      const anim = foto.animate([
-        { transform: 'translate(0,0) scale(1)', opacity: 1, offset: 0 },
-        { transform: 'translate(0,-14px) scale(1.05)', opacity: 1, offset: 0.3 },
-        { transform: 'translate(' + (x1 - x0) + 'px, ' + (y1 - y0) + 'px) scale(.15)', opacity: 0, offset: 1 }
-      ], { duration: 420, easing: 'cubic-bezier(.3,0,.6,1)', fill: 'forwards' });
+      // Lintasan melengkung tipis (kurva Bezier) + agak pelan + ease-in-out,
+      // biar keliatan halus, bukan meloncat cepat lurus ke atas.
+      const xc = x0 + 16; // geser dikit ke samping = sumber lengkungan
+      const yc = y1 - 20; // sedikit naik dulu di titik tengah lintasan
+      const langkah = 20;
+      const frames = [];
+      for (let i = 0; i <= langkah; i++) {
+        const t = i / langkah, u = 1 - t;
+        const x = u * u * x0 + 2 * u * t * xc + t * t * x1;
+        const y = u * u * y0 + 2 * u * t * yc + t * t * y1;
+        frames.push({
+          offset: t,
+          transform: 'translate(' + (x - x0).toFixed(1) + 'px, ' + (y - y0).toFixed(1) + 'px) scale(' + (1 - 0.85 * t).toFixed(2) + ')',
+          opacity: t < 0.8 ? 1 : 1 - (t - 0.8) / 0.2
+        });
+      }
+
+      const anim = foto.animate(frames, { duration: 650, easing: 'cubic-bezier(.45,0,.55,1)', fill: 'forwards' });
       anim.onfinish = () => { foto.remove(); denyut(); };
     }
 
