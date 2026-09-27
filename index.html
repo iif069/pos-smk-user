@@ -1875,10 +1875,42 @@
     return `<div class="kartu-pesanan"><div class="waktu-pesanan">${tgl}</div>${isiItem}<div class="total-pesanan"><span>Total</span><span>${formatRupiah(r.total)}</span></div></div>`;
   }).join('');
 }
+    // Kirim salinan pesanan ke kasir (sheet "Pesanan Masuk") supaya kasir bisa
+    // lihat ada pesanan baru tanpa harus mantengin chat WhatsApp. INI CUMA
+    // NOTIFIKASI -- tidak memotong stok sama sekali (itu baru terjadi saat
+    // kasir menekan "Proses" di halaman kasir).
+    //
+    // Sengaja dibuat "fire-and-forget": dipanggil BARENGAN saat tombol WA
+    // diklik, TIDAK ditunggu (tidak pakai await/callback yang menunda), dan
+    // kalau gagal (internet lambat, dsb) diam-diam saja -- WA tetap jadi
+    // sumber utama pesanan dan tidak boleh ketunda gara-gara ini.
+    function kirimNotifikasiPesanan() {
+      try {
+        const items = Object.values(keranjang).map(item => ({ id: item.produk.ID, jumlah: item.jumlah }));
+        const data = { nama: namaPembeli, items: items, total: hitungTotal() };
+
+        const namaCallback = 'cbPesanan' + Date.now();
+        const tagScript = document.createElement('script');
+        window[namaCallback] = function () {
+          delete window[namaCallback];
+          tagScript.remove();
+        };
+        tagScript.onerror = function () {
+          delete window[namaCallback];
+          tagScript.remove();
+        };
+        tagScript.src = URL_API + '?action=kirimPesananPembeli&data=' + encodeURIComponent(JSON.stringify(data)) + '&callback=' + namaCallback;
+        document.body.appendChild(tagScript);
+      } catch (e) {
+        // Gagal kirim notifikasi bukan masalah besar -- WA tetap jadi sumber utama pesanan.
+      }
+    }
+
     function bukaWhatsapp() {
       if (Object.keys(keranjang).length === 0) return;
       if (!validasiNamaKonfirmasi()) return;
       simpanRiwayatPesanan();
+      kirimNotifikasiPesanan();
       const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(buatTeksPesanan());
       window.open(url, '_blank');
     }
