@@ -840,6 +840,55 @@
     .rincian-ringkasan { display: none; margin: 0 16px; padding: 0 13px; background: #fff; border: 1px solid var(--line); border-top: none; border-radius: 0 0 10px 10px; }
     .rincian-ringkasan.tampil { display: block; padding: 10px 13px 12px; }
     .rincian-ringkasan .baris { display: flex; justify-content: space-between; font-size: 12.5px; padding: 4px 0; color: var(--ink); }
+
+    /* ---------- Tracking pesanan (halaman Pesanan Saya) ---------- */
+    .info-jadwal-pesanan {
+      display: flex; gap: 9px; align-items: flex-start;
+      margin: 0 16px 14px;
+      padding: 12px 13px;
+      border-radius: 10px;
+      background: #fff3d6;
+      color: #7a4a00;
+      font-size: 12.5px;
+      line-height: 1.5;
+    }
+    .info-jadwal-pesanan .ikon { flex-shrink: 0; }
+    .info-jadwal-pesanan .judul-kecil { font-weight: 700; display: block; margin-bottom: 2px; }
+    .btn-segarkan {
+      width: 34px; height: 34px; border: none; border-radius: 50%;
+      background: #f1efe9; color: var(--ink); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .btn-segarkan svg { width: 16px; height: 16px; transition: transform .5s ease; }
+    .btn-segarkan.muter svg { transform: rotate(360deg); }
+
+    .kartu-tracking { padding: 0; overflow: hidden; }
+    .header-tracking { display: flex; align-items: center; justify-content: space-between; padding: 13px 14px 11px; border-bottom: 1px solid var(--line); gap: 8px; }
+    .header-tracking-kiri { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .nota-tracking { font-weight: 700; font-size: 14px; }
+    .tgl-tracking { font-size: 11px; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+    .badge-status-tracking { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .badge-status-tracking.diterima { background: #f1efe9; color: var(--muted); }
+    .badge-status-tracking.disiapkan { background: #fdecc7; color: var(--peringatan); }
+    .badge-status-tracking.siap { background: #dcf7e3; color: #1a8a3d; }
+
+    .timeline-tracking { padding: 14px; }
+    .langkah-tracking { position: relative; padding-left: 22px; padding-bottom: 16px; }
+    .langkah-tracking:last-child { padding-bottom: 0; }
+    .langkah-tracking::before {
+      content: ''; position: absolute; left: 5px; top: 16px; bottom: -2px; width: 2px; background: var(--line);
+    }
+    .langkah-tracking:last-child::before { display: none; }
+    .titik-tracking { position: absolute; left: 0; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--muted); opacity: .4; }
+    .langkah-tracking .judul-langkah { font-size: 12.5px; font-weight: 600; color: var(--muted); }
+    .langkah-tracking .ket-langkah { font-size: 11.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+    .langkah-tracking.aktif .judul-langkah { color: var(--ink); font-size: 13.5px; font-weight: 700; }
+    .langkah-tracking.aktif .ket-langkah { color: var(--ink); opacity: .75; }
+    .langkah-tracking.aktif.diterima .titik-tracking { background: var(--accent); opacity: 1; box-shadow: 0 0 0 4px var(--accent-light); }
+    .langkah-tracking.aktif.disiapkan .titik-tracking { background: var(--peringatan); opacity: 1; box-shadow: 0 0 0 4px #fdecc7; }
+    .langkah-tracking.aktif.siap .titik-tracking { background: #1a8a3d; opacity: 1; box-shadow: 0 0 0 4px #dcf7e3; }
+
+    .footer-tracking { padding: 12px 14px 13px; background: #fbfaf7; border-top: 1px solid var(--line); }
   </style>
 </head>
 <body>
@@ -998,8 +1047,19 @@
       </header>
       <div class="konten-dgn-nav" style="flex:1; display:flex; flex-direction:column;">
         <div class="keranjang-judul-wrap">
-        <h2>Pesanan Saya</h2>
-        <p class="keranjang-subjudul">Pantau status pesananmu di sini.</p>
+        <div class="keranjang-baris-sub">
+          <div>
+            <h2>Pesanan Saya</h2>
+            <p class="keranjang-subjudul">Pantau status pesananmu di sini.</p>
+          </div>
+          <button type="button" class="btn-segarkan" id="btn-segarkan-pesanan" onclick="muatStatusPesanan(true)" aria-label="Segarkan status">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="info-jadwal-pesanan">
+        <span class="ikon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg></span>
+        <span><span class="judul-kecil">Jadwal Pengambilan</span>Pengambilan dibuka mulai jam 15.00 di toko MIG Digital Printing. Tunjukkan nomor nota ke admin.</span>
       </div>
       <div class="daftar-keranjang-halaman" id="daftar-pesanan"></div>
     </div>
@@ -1849,6 +1909,10 @@
     function bacaRiwayat() {
       try { return JSON.parse(localStorage.getItem(KUNCI_RIWAYAT)) || []; } catch (e) { return []; }
     }
+    // Menyimpan pesanan baru ke riwayat lokal HP pembeli. Mengembalikan
+    // `waktu` (timestamp) record ini, dipakai kirimNotifikasiPesanan() untuk
+    // menandai idPesanan (nomor tracking dari backend) ke entri yang tepat
+    // begitu responnya datang -- lihat tandaiIdPesanan().
     function simpanRiwayatPesanan() {
       const daftar = Object.values(keranjang).map(item => ({
         nama: item.produk['Nama Produk'],
@@ -1856,25 +1920,143 @@
         jumlah: item.jumlah,
         harga: item.produk.Harga
       }));
+      const waktu = Date.now();
       const riwayat = bacaRiwayat();
-      riwayat.unshift({ waktu: Date.now(), pemesan: namaPembeli, kelas: kelasPembeli, items: daftar, total: hitungTotal() });
+      riwayat.unshift({ waktu: waktu, pemesan: namaPembeli, kelas: kelasPembeli, items: daftar, total: hitungTotal() });
       try { localStorage.setItem(KUNCI_RIWAYAT, JSON.stringify(riwayat.slice(0, 30))); } catch (e) {}
+      return waktu;
     }
+
+    // ---- Tracking status pesanan (halaman "Pesanan Saya") ----
+
+    function labelStatusPesanan(status) {
+      if (status === 'Sudah Diproses') return { teks: 'Siap Diambil', kelas: 'siap' };
+      if (status === 'Disiapkan') return { teks: 'Disiapkan', kelas: 'disiapkan' };
+      return { teks: 'Diterima', kelas: 'diterima' };
+    }
+
+    // Bangun timeline (terbalik, terbaru di atas -- ikut pola referensi
+    // desain): cuma langkah yang sudah dilewati + langkah sekarang yang
+    // ditampilkan, langkah yang belum terjadi tidak dirender sama sekali.
+    // Catatan: jam cuma ada di langkah "Pesanan diterima" (dari waktu HP
+    // pembeli sendiri) -- backend belum mencatat jam persis tiap pergantian
+    // status, jadi langkah lain sengaja tanpa jam daripada mengarang.
+    function renderTimelinePesanan(status, waktuDiterima) {
+      const jamDiterima = new Date(waktuDiterima).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      const langkah = [
+        { kunci: 'diterima', judul: 'Pesanan diterima', ket: 'Pesananmu sudah masuk dan menunggu dicek admin.', jam: jamDiterima },
+        { kunci: 'disiapkan', judul: 'Sedang disiapkan', ket: 'Admin sedang menyiapkan & mengemas pesananmu.', jam: '' },
+        { kunci: 'siap', judul: 'Siap diambil', ket: 'Ambil mulai jam 3 sore, sebutkan nomor nota & siapkan uang pas.', jam: '' }
+      ];
+      const statusKeIndex = status === 'Sudah Diproses' ? 2 : (status === 'Disiapkan' ? 1 : 0);
+
+      return langkah.slice(0, statusKeIndex + 1).reverse().map((l, i) => {
+        const aktif = i === 0; // item pertama di daftar yang sudah dibalik = status terkini
+        return `
+          <div class="langkah-tracking ${aktif ? 'aktif ' + l.kunci : ''}">
+            <span class="titik-tracking"></span>
+            <div class="isi-langkah">
+              <div class="judul-langkah">${l.judul}${l.jam ? ' <span style="font-weight:400;color:var(--muted);">· ' + l.jam + '</span>' : ''}</div>
+              <div class="ket-langkah">${l.ket}</div>
+            </div>
+          </div>`;
+      }).join('');
+    }
+
+    function renderKartuPesanan(r) {
+      const info = labelStatusPesanan(r.status);
+      const tglTampil = new Date(r.waktu).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      const judulNota = r.noNota ? ('Nota #' + r.noNota) : (r.idPesanan ? ('Pesanan #' + r.idPesanan) : 'Pesanan (menunggu tersinkron)');
+      const isiItem = r.items.map(it =>
+        `<div class="baris-item-pesanan"><span>${it.nama}${it.varian ? ' (' + it.varian + ')' : ''} x${it.jumlah}</span><span>${formatRupiah(it.harga * it.jumlah)}</span></div>`
+      ).join('');
+
+      return `
+        <div class="kartu-pesanan kartu-tracking">
+          <div class="header-tracking">
+            <div class="header-tracking-kiri">
+              <span class="nota-tracking">${judulNota}</span>
+              <span class="badge-status-tracking ${info.kelas}">${info.teks}</span>
+            </div>
+            <span class="tgl-tracking">${tglTampil}</span>
+          </div>
+          <div class="timeline-tracking">${renderTimelinePesanan(r.status, r.waktu)}</div>
+          <div class="footer-tracking">
+            ${isiItem}
+            <div class="total-pesanan"><span>Total</span><span>${formatRupiah(r.total)}</span></div>
+          </div>
+        </div>`;
+    }
+
     function renderRiwayatPesanan() {
       const wadah = document.getElementById('daftar-pesanan');
       const riwayat = bacaRiwayat();
-        if (riwayat.length === 0) {
+      if (riwayat.length === 0) {
         wadah.innerHTML = '<div class="kosong">Belum ada pesanan yang dikirim.</div>';
         return;
+      }
+      wadah.innerHTML = riwayat.map(renderKartuPesanan).join('');
+    }
+
+    // Minta status terkini ke backend untuk semua pesanan yang sudah punya
+    // idPesanan (nomor baris di sheet "Pesanan Masuk"). Dipanggil tiap kali
+    // halaman "Pesanan Saya" dibuka, dan juga lewat tombol Segarkan (manual =
+    // true, dipakai buat kasih efek putar ikon).
+    function muatStatusPesanan(manual) {
+      const tombol = document.getElementById('btn-segarkan-pesanan');
+      const riwayat = bacaRiwayat();
+      const idList = riwayat.filter(r => r.idPesanan).map(r => r.idPesanan);
+      if (!idList.length) return; // belum ada pesanan yang tersinkron ke backend sama sekali
+
+      if (manual && tombol) {
+        tombol.classList.add('muter');
+        setTimeout(() => tombol.classList.remove('muter'), 500);
+      }
+
+      const namaCallback = 'cbStatus' + Date.now();
+      const tagScript = document.createElement('script');
+      window[namaCallback] = function (respon) {
+        delete window[namaCallback];
+        tagScript.remove();
+        // Gagal ambil status bukan masalah besar -- tampilan lokal yang sudah
+        // ada (dari kunjungan sebelumnya) dibiarkan apa adanya.
+        if (!respon || !respon.sukses || !Array.isArray(respon.data)) return;
+
+        const riwayatSekarang = bacaRiwayat();
+        respon.data.forEach(item => {
+          const entri = riwayatSekarang.find(r => r.idPesanan === item.idPesanan);
+          if (entri) {
+            entri.status = item.status;
+            entri.noNota = item.noNota;
+          }
+        });
+        try { localStorage.setItem(KUNCI_RIWAYAT, JSON.stringify(riwayatSekarang)); } catch (e) {}
+        if (halamanAktif === 'pesanan') renderRiwayatPesanan();
+      };
+      tagScript.onerror = function () {
+        delete window[namaCallback];
+        tagScript.remove();
+      };
+      tagScript.src = URL_API + '?action=getStatusPesanan&idList=' + encodeURIComponent(JSON.stringify(idList)) + '&callback=' + namaCallback;
+      document.body.appendChild(tagScript);
+    }
+
+    // Setelah kirimPesananPembeli() sukses dan backend membalas idPesanan
+    // (nomor baris di sheet), tempelkan ke entri riwayat lokal yang sesuai
+    // (dicocokkan lewat `waktu`, bukan isi pesanan -- supaya tetap akurat
+    // walau ada 2 pesanan dengan isi yang kebetulan sama).
+    function tandaiIdPesanan(waktuPesanan, idPesanan) {
+      try {
+        const riwayat = bacaRiwayat();
+        const entri = riwayat.find(r => r.waktu === waktuPesanan);
+        if (entri) {
+          entri.idPesanan = idPesanan;
+          localStorage.setItem(KUNCI_RIWAYAT, JSON.stringify(riwayat));
+          if (halamanAktif === 'pesanan') renderRiwayatPesanan();
         }
-        wadah.innerHTML = riwayat.map(r => {
-      const tgl = new Date(r.waktu).toLocaleString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      const isiItem = r.items.map(it =>
-      `<div class="baris-item-pesanan"><span>${it.nama}${it.varian ? ' (' + it.varian + ')' : ''} x${it.jumlah}</span><span>${formatRupiah(it.harga * it.jumlah)}</span></div>`
-    ).join('');
-    return `<div class="kartu-pesanan"><div class="waktu-pesanan">${tgl}</div>${isiItem}<div class="total-pesanan"><span>Total</span><span>${formatRupiah(r.total)}</span></div></div>`;
-  }).join('');
-}
+      } catch (e) {}
+    }
+
     // Kirim salinan pesanan ke kasir (sheet "Pesanan Masuk") supaya kasir bisa
     // lihat ada pesanan baru tanpa harus mantengin chat WhatsApp. INI CUMA
     // NOTIFIKASI -- tidak memotong stok sama sekali (itu baru terjadi saat
@@ -1884,16 +2066,23 @@
     // diklik, TIDAK ditunggu (tidak pakai await/callback yang menunda), dan
     // kalau gagal (internet lambat, dsb) diam-diam saja -- WA tetap jadi
     // sumber utama pesanan dan tidak boleh ketunda gara-gara ini.
-    function kirimNotifikasiPesanan() {
+    //
+    // waktuPesanan diteruskan supaya begitu respon backend datang (idPesanan
+    // buat tracking), kita tahu entri riwayat lokal mana yang harus ditandai
+    // -- lihat tandaiIdPesanan().
+    function kirimNotifikasiPesanan(waktuPesanan) {
       try {
         const items = Object.values(keranjang).map(item => ({ id: item.produk.ID, jumlah: item.jumlah }));
         const data = { nama: namaPembeli, items: items, total: hitungTotal() };
 
         const namaCallback = 'cbPesanan' + Date.now();
         const tagScript = document.createElement('script');
-        window[namaCallback] = function () {
+        window[namaCallback] = function (respon) {
           delete window[namaCallback];
           tagScript.remove();
+          if (respon && respon.sukses && respon.data && respon.data.idPesanan) {
+            tandaiIdPesanan(waktuPesanan, respon.data.idPesanan);
+          }
         };
         tagScript.onerror = function () {
           delete window[namaCallback];
@@ -1909,8 +2098,8 @@
     function bukaWhatsapp() {
       if (Object.keys(keranjang).length === 0) return;
       if (!validasiNamaKonfirmasi()) return;
-      simpanRiwayatPesanan();
-      kirimNotifikasiPesanan();
+      const waktuPesanan = simpanRiwayatPesanan();
+      kirimNotifikasiPesanan(waktuPesanan);
       const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(buatTeksPesanan());
       window.open(url, '_blank');
     }
@@ -1935,6 +2124,7 @@
       }
       if (nama === 'pesanan') {
         renderRiwayatPesanan();
+        muatStatusPesanan();
       }
       renderKeranjang(); // perbarui status mini-cart-bar (tampil hanya di katalog)
       window.scrollTo(0, 0);
