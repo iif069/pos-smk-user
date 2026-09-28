@@ -43,7 +43,7 @@
     html, body { margin: 0; padding: 0; }
     body {
       font-family: 'Sora', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #ffffff;
+      background: #faf9f6;
       color: var(--ink);
     }
 
@@ -54,7 +54,7 @@
       max-width: 480px;
       margin: 0 auto;
       min-height: 100vh;
-      background: linear-gradient(rgba(0,0,0,.10), rgba(0,0,0,.10)), #fff;
+      background: #fff;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -618,6 +618,7 @@
       padding: 12px 13px;
       border-radius: 10px;
       background: #fff3d6;
+      border: 1px solid #fcd34d;
       color: #7a4a00;
       font-size: 12.5px;
       line-height: 1.5;
@@ -844,10 +845,11 @@
     /* ---------- Tracking pesanan (halaman Pesanan Saya) ---------- */
     .info-jadwal-pesanan {
       display: flex; gap: 9px; align-items: flex-start;
-      margin: 0 16px 14px;
+      margin: 14px 16px 14px;
       padding: 12px 13px;
       border-radius: 10px;
       background: #fff3d6;
+      border: 1px solid #fcd34d;
       color: #7a4a00;
       font-size: 12.5px;
       line-height: 1.5;
@@ -1034,10 +1036,9 @@
     <!-- ======================= HALAMAN: PESANAN ======================= -->
     <section class="halaman" id="halaman-pesanan">
       <header class="app-header">
-        <img class="logo-mig" src="apple-touch-icon.png" alt="Logo MIG Digital Printing">
-        <div class="header-teks">
-          <h1>MIG Digital Printing</h1>
-        </div>
+      <button type="button" class="btn-back-header" onclick="gantiHalaman('katalog')" aria-label="Kembali ke katalog" style="justify-content: flex-start;">
+      <span class="judul-halaman">Pesanan Saya</span>
+    </button>
         <div class="header-aksi">
           <button type="button" class="btn-icon" onclick="gantiHalaman('keranjang')" aria-label="Keranjang">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
@@ -1046,20 +1047,19 @@
         </div>
       </header>
       <div class="konten-dgn-nav" style="flex:1; display:flex; flex-direction:column;">
+      <div class="info-jadwal-pesanan">
+        <span class="ikon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg></span>
+        <span><span class="judul-kecil">Jadwal Pengambilan</span>Pengambilan dibuka mulai jam 15.00 di toko MIG Digital Printing. Tunjukkan nomor nota ke admin.</span>
+      </div>
         <div class="keranjang-judul-wrap">
         <div class="keranjang-baris-sub">
           <div>
-            <h2>Pesanan Saya</h2>
             <p class="keranjang-subjudul">Pantau status pesananmu di sini.</p>
           </div>
           <button type="button" class="btn-segarkan" id="btn-segarkan-pesanan" onclick="muatStatusPesanan(true)" aria-label="Segarkan status">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
           </button>
         </div>
-      </div>
-      <div class="info-jadwal-pesanan">
-        <span class="ikon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:block"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm.5 5v5.3l4 2.4-.75 1.2-4.75-2.9V7h1.5z"/></svg></span>
-        <span><span class="judul-kecil">Jadwal Pengambilan</span>Pengambilan dibuka mulai jam 15.00 di toko MIG Digital Printing. Tunjukkan nomor nota ke admin.</span>
       </div>
       <div class="daftar-keranjang-halaman" id="daftar-pesanan"></div>
     </div>
@@ -1121,7 +1121,7 @@
           <div><div class="judul-trust">Alamat</div><div class="ket-trust"><a href="https://maps.app.goo.gl/eqwx6mceE1yR65ax9" target="_blank" rel="noopener" style="color:inherit; text-decoration:underline; text-underline-offset:2px;">Jln raya Rajadesa - Rancah, sebrang MIG Swalayan</a></div></div>
         </div>
         <div class="baris-trust">
-          <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15l-.94 1.164c-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.446-.52.149-.174.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074C7.9 15.5 9.85 18.5 12.83 19.79c.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg></span>
+          <span class="ikon-trust"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15l-.94 1.164c-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.446-.52.149-.174.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074C7.9 15.5 9.85 18.5 12.83 19.79c.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 22h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26C2.167 6.658 6.602 2.223 12.054 2.223c2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994C21.932 17.566 17.497 22 12.05 22"/></svg></span>
           <div><div class="judul-trust">WhatsApp Toko</div><div class="ket-trust" id="info-nomor-wa">-</div></div>
         </div>
       </div>
