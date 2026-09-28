@@ -486,7 +486,7 @@
       border-radius: 12px;
       padding: 12px;
       display: grid;
-      grid-template-columns: 64px 1fr;
+      grid-template-columns: 90px 1fr;
       gap: 12px;
     }
     .kartu-pesanan { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
@@ -495,7 +495,7 @@
     .kartu-pesanan .baris-item-pesanan { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; margin-bottom: 4px; }
     .kartu-pesanan .total-pesanan { display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
     .foto-keranjang {
-      width: 64px; height: 64px;
+      width: 90px; height: 90px;
       border: 1px solid var(--line);
       border-radius: 10px;
       background: #fff;
@@ -2102,6 +2102,8 @@
       kirimNotifikasiPesanan(waktuPesanan);
       const url = 'https://wa.me/' + NOMOR_WA + '?text=' + encodeURIComponent(buatTeksPesanan());
       window.open(url, '_blank');
+      keranjang = {};
+      renderKeranjang();
     }
 
     // ---- Navigasi antar halaman (ganti seluruh layar, ada tombol back) ----
